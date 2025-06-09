@@ -21,6 +21,73 @@ export default function CompararPrecosScreen() {
     }
   );
   const [quantidade, setQuantidade] = useState("1");
+  const [valor, setValor] = useState("");
+
+  // Função para extrair valor numérico do formato de moeda R$
+  const extrairValorNumerico = (valorFormatado: string): number => {
+    if (!valorFormatado) return 0;
+    // Remove caracteres não numéricos, exceto ponto e vírgula
+    const numerico = valorFormatado.replace(/[^\d,\.]/g, "").replace(",", ".");
+    return parseFloat(numerico) || 0;
+  };
+
+  // Função para calcular o valor unitário
+  const calcularValorUnitario = (): string => {
+    const valorNumerico = extrairValorNumerico(valor);
+    if (!valorNumerico) return "Informe um valor";
+
+    const qtd = parseFloat(quantidade) || 1;
+
+    if (["Caixa", "Pack", "Fardo"].includes(unidadeSelecionada)) {
+      const unidadesPorEmbalagem =
+        parseFloat(detalhesEmbalagem.quantidadeUnidades) || 1;
+      const qtdPorUnidade =
+        parseFloat(detalhesEmbalagem.quantidadePorUnidade) || 1;
+      const totalUnidades = qtd * unidadesPorEmbalagem;
+      const totalMedida = totalUnidades * qtdPorUnidade;
+
+      // Converte para a unidade de medida adequada para comparação
+      let valorUnitario = valorNumerico / totalMedida;
+
+      // Formatação baseada na unidade interna
+      if (
+        detalhesEmbalagem.unidadeInterna.includes("Kilo") ||
+        detalhesEmbalagem.unidadeInterna.includes("Litro")
+      ) {
+        return `R$ ${valorUnitario.toFixed(2).replace(".", ",")} por ${detalhesEmbalagem.unidadeInterna}`;
+      } else if (
+        detalhesEmbalagem.unidadeInterna.includes("Kilograma") ||
+        detalhesEmbalagem.unidadeInterna.includes("Mililitro")
+      ) {
+        // Converte para kilo/litro para melhor comparação
+        valorUnitario = valorUnitario * 1000;
+        const unidadePadrão = detalhesEmbalagem.unidadeInterna.includes(
+          "Kilograma"
+        )
+          ? "Kilo (kg)"
+          : "Litro (l)";
+        return `R$ ${valorUnitario.toFixed(2).replace(".", ",")} por ${unidadePadrão}`;
+      } else {
+        return `R$ ${valorUnitario.toFixed(2).replace(".", ",")} por ${detalhesEmbalagem.unidadeInterna}`;
+      }
+    } else {
+      // Para unidades simples
+      const valorUnitario = valorNumerico / qtd;
+
+      // Formatação baseada na unidade selecionada
+      if (unidadeSelecionada.includes("Kilograma")) {
+        // Converte para kilo para melhor comparação
+        const valorPorKilo = valorUnitario * 1000;
+        return `R$ ${valorPorKilo.toFixed(2).replace(".", ",")} por Kilo (kg)`;
+      } else if (unidadeSelecionada.includes("Mililitro")) {
+        // Converte para litro para melhor comparação
+        const valorPorLitro = valorUnitario * 1000;
+        return `R$ ${valorPorLitro.toFixed(2).replace(".", ",")} por Litro (l)`;
+      } else {
+        return `R$ ${valorUnitario.toFixed(2).replace(".", ",")} por ${unidadeSelecionada}`;
+      }
+    }
+  };
 
   return (
     <ParallaxScrollView
@@ -49,6 +116,8 @@ export default function CompararPrecosScreen() {
           label="Unidade de medida"
           quantidade={quantidade}
           aoAlterarQuantidade={setQuantidade}
+          valor={valor}
+          aoAlterarValor={setValor}
         />
         <ThemedText>
           Unidade selecionada:{" "}
@@ -58,6 +127,28 @@ export default function CompararPrecosScreen() {
           Quantidade:{" "}
           <ThemedText type="defaultSemiBold">{quantidade}</ThemedText>
         </ThemedText>
+        <ThemedText>
+          Valor:{" "}
+          <ThemedText type="defaultSemiBold">
+            {valor || "Não informado"}
+          </ThemedText>
+        </ThemedText>
+
+        {valor && (
+          <ThemedView
+            style={[
+              styles.infoContainer,
+              { backgroundColor: "rgba(65, 184, 131, 0.15)" },
+            ]}
+          >
+            <ThemedText style={{ fontWeight: "600" }}>
+              Valor Unitário para Comparação:
+            </ThemedText>
+            <ThemedText style={{ fontSize: 18 }}>
+              {calcularValorUnitario()}
+            </ThemedText>
+          </ThemedView>
+        )}
 
         {!["Caixa", "Pack", "Fardo"].includes(unidadeSelecionada) && (
           <ThemedView style={styles.infoContainer}>
@@ -103,10 +194,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+    marginBottom: 16,
   },
   stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+    gap: 12,
+    marginBottom: 16,
   },
   infoContainer: {
     marginTop: 8,

@@ -50,6 +50,8 @@ interface UnidadeSelectorAvancadoProps {
   label?: string;
   quantidade?: string;
   aoAlterarQuantidade?: (quantidade: string) => void;
+  valor?: string;
+  aoAlterarValor?: (valor: string) => void;
 }
 
 export const UnidadeSelectorAvancado: React.FC<
@@ -66,11 +68,14 @@ export const UnidadeSelectorAvancado: React.FC<
   label = "Unidade",
   quantidade = "1",
   aoAlterarQuantidade = () => {},
+  valor = "",
+  aoAlterarValor = () => {},
 }) => {
   const [modalVisivel, setModalVisivel] = useState(false);
   const [modalUnidadeInternaVisivel, setModalUnidadeInternaVisivel] =
     useState(false);
   const [quantidadeLocal, setQuantidadeLocal] = useState(quantidade);
+  const [valorLocal, setValorLocal] = useState(valor);
 
   // Estado local para os detalhes da embalagem
   const [detalhes, setDetalhes] =
@@ -87,6 +92,33 @@ export const UnidadeSelectorAvancado: React.FC<
   const atualizarQuantidade = (novaQuantidade: string) => {
     setQuantidadeLocal(novaQuantidade);
     aoAlterarQuantidade(novaQuantidade);
+  };
+
+  // Formata o valor como moeda (R$)
+  const formatarValorComoMoeda = (valor: string) => {
+    // Remove caracteres não numéricos
+    let valorNumerico = valor.replace(/[^\d]/g, "");
+
+    // Formata como moeda brasileira (R$)
+    if (valorNumerico) {
+      // Converte para centavos
+      const centavos = parseInt(valorNumerico, 10);
+      // Formata para reais com 2 casas decimais
+      return `R$ ${(centavos / 100).toFixed(2).replace(".", ",")}`;
+    }
+    return "";
+  };
+
+  // Atualiza o valor local e notifica o componente pai
+  const atualizarValor = (novoValor: string) => {
+    // Remove caracteres não numéricos para manipulação
+    const apenasNumeros = novoValor.replace(/[^\d]/g, "");
+
+    // Formata para exibição
+    const valorFormatado = formatarValorComoMoeda(apenasNumeros);
+
+    setValorLocal(valorFormatado);
+    aoAlterarValor(valorFormatado);
   };
 
   // Cores baseadas no tema
@@ -205,6 +237,26 @@ export const UnidadeSelectorAvancado: React.FC<
           onChangeText={atualizarQuantidade}
           keyboardType="numeric"
           placeholder="Ex: 1"
+          placeholderTextColor={textColor + "80"}
+        />
+      </View>
+
+      {/* Campo de valor */}
+      <View style={styles.campoContainer}>
+        <ThemedText style={styles.campoLabel}>Valor</ThemedText>
+        <TextInput
+          style={[
+            styles.input,
+            {
+              borderColor,
+              color: textColor,
+              backgroundColor: inputBackgroundColor,
+            },
+          ]}
+          value={valorLocal}
+          onChangeText={atualizarValor}
+          keyboardType="numeric"
+          placeholder="Ex: R$ 0,00"
           placeholderTextColor={textColor + "80"}
         />
       </View>
