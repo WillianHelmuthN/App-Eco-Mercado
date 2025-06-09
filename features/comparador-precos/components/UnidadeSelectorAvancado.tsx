@@ -9,8 +9,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useThemeColor } from "../hooks/useThemeColor";
-import { ThemedText } from "./ThemedText";
+import { ThemedText } from "../../../components/ThemedText";
+import { useThemeColor } from "../../../hooks/useThemeColor";
 
 // Tipos de unidades disponíveis
 export type UnidadeMedida =
