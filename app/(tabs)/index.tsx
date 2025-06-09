@@ -1,18 +1,16 @@
-import { Image } from "expo-image";
-import { StyleSheet } from "react-native";
-import { useState } from "react";
-
-import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import {
-  UnidadeSelectorAvancado,
-  UnidadeMedida,
   DetalhesEmbalagem,
+  UnidadeMedida,
+  UnidadeSelectorAvancado,
 } from "@/components/UnidadeSelectorAvancado";
+import { Image } from "expo-image";
+import { useState } from "react";
+import { StyleSheet } from "react-native";
 
-export default function HomeScreen() {
+export default function CompararPrecosScreen() {
   const [unidadeSelecionada, setUnidadeSelecionada] =
     useState<UnidadeMedida>("Kilograma (g)");
   const [detalhesEmbalagem, setDetalhesEmbalagem] = useState<DetalhesEmbalagem>(
@@ -34,14 +32,13 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Bem-vindo!</ThemedText>
-        <HelloWave />
+        <ThemedText type="title">Comparador de Preços</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Exemplo de Seletor de Unidades</ThemedText>
+        <ThemedText type="subtitle">Selecione a Unidade do Produto</ThemedText>
         <ThemedText>
-          Selecione a unidade de medida para comparação de preços:
+          Escolha a unidade de medida para comparação de preços:
         </ThemedText>
         <UnidadeSelectorAvancado
           unidadeSelecionada={unidadeSelecionada}
@@ -55,7 +52,7 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">{unidadeSelecionada}</ThemedText>
         </ThemedText>
 
-        {["caixa", "pack", "fardo"].includes(unidadeSelecionada) && (
+        {["Caixa", "Pack", "Fardo"].includes(unidadeSelecionada) && (
           <ThemedView style={styles.infoContainer}>
             <ThemedText>Detalhes da embalagem:</ThemedText>
             <ThemedText>

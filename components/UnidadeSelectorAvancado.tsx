@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Modal,
   FlatList,
+  Modal,
   SafeAreaView,
+  StyleSheet,
+  Text,
   TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { ThemedText } from "./ThemedText";
 import { useThemeColor } from "../hooks/useThemeColor";
+import { ThemedText } from "./ThemedText";
 
 // Tipos de unidades disponíveis
 export type UnidadeMedida =
