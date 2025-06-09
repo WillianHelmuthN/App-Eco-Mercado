@@ -20,6 +20,7 @@ export default function CompararPrecosScreen() {
       unidadeInterna: "Mililitro (ml)",
     }
   );
+  const [quantidade, setQuantidade] = useState("1");
 
   return (
     <ParallaxScrollView
@@ -46,11 +47,25 @@ export default function CompararPrecosScreen() {
           detalhesEmbalagem={detalhesEmbalagem}
           aoAlterarDetalhesEmbalagem={setDetalhesEmbalagem}
           label="Unidade de medida"
+          quantidade={quantidade}
+          aoAlterarQuantidade={setQuantidade}
         />
         <ThemedText>
           Unidade selecionada:{" "}
           <ThemedText type="defaultSemiBold">{unidadeSelecionada}</ThemedText>
         </ThemedText>
+        <ThemedText>
+          Quantidade:{" "}
+          <ThemedText type="defaultSemiBold">{quantidade}</ThemedText>
+        </ThemedText>
+
+        {!["Caixa", "Pack", "Fardo"].includes(unidadeSelecionada) && (
+          <ThemedView style={styles.infoContainer}>
+            <ThemedText>
+              Total: {quantidade} {unidadeSelecionada}
+            </ThemedText>
+          </ThemedView>
+        )}
 
         {["Caixa", "Pack", "Fardo"].includes(unidadeSelecionada) && (
           <ThemedView style={styles.infoContainer}>
@@ -64,8 +79,15 @@ export default function CompararPrecosScreen() {
               {detalhesEmbalagem.unidadeInterna} por unidade
             </ThemedText>
             <ThemedText>
-              • Total:{" "}
+              • Total por embalagem:{" "}
               {Number(detalhesEmbalagem.quantidadeUnidades) *
+                Number(detalhesEmbalagem.quantidadePorUnidade)}{" "}
+              {detalhesEmbalagem.unidadeInterna}
+            </ThemedText>
+            <ThemedText>
+              • Total considerando quantidade:{" "}
+              {Number(quantidade) *
+                Number(detalhesEmbalagem.quantidadeUnidades) *
                 Number(detalhesEmbalagem.quantidadePorUnidade)}{" "}
               {detalhesEmbalagem.unidadeInterna}
             </ThemedText>

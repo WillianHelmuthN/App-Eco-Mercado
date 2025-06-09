@@ -48,6 +48,8 @@ interface UnidadeSelectorAvancadoProps {
   detalhesEmbalagem?: DetalhesEmbalagem;
   aoAlterarDetalhesEmbalagem?: (detalhes: DetalhesEmbalagem) => void;
   label?: string;
+  quantidade?: string;
+  aoAlterarQuantidade?: (quantidade: string) => void;
 }
 
 export const UnidadeSelectorAvancado: React.FC<
@@ -62,10 +64,13 @@ export const UnidadeSelectorAvancado: React.FC<
   },
   aoAlterarDetalhesEmbalagem = () => {},
   label = "Unidade",
+  quantidade = "1",
+  aoAlterarQuantidade = () => {},
 }) => {
   const [modalVisivel, setModalVisivel] = useState(false);
   const [modalUnidadeInternaVisivel, setModalUnidadeInternaVisivel] =
     useState(false);
+  const [quantidadeLocal, setQuantidadeLocal] = useState(quantidade);
 
   // Estado local para os detalhes da embalagem
   const [detalhes, setDetalhes] =
@@ -76,6 +81,12 @@ export const UnidadeSelectorAvancado: React.FC<
     const detalhesAtualizados = { ...detalhes, ...novoDetalhes };
     setDetalhes(detalhesAtualizados);
     aoAlterarDetalhesEmbalagem(detalhesAtualizados);
+  };
+
+  // Atualiza a quantidade local e notifica o componente pai
+  const atualizarQuantidade = (novaQuantidade: string) => {
+    setQuantidadeLocal(novaQuantidade);
+    aoAlterarQuantidade(novaQuantidade);
   };
 
   // Cores baseadas no tema
@@ -177,6 +188,26 @@ export const UnidadeSelectorAvancado: React.FC<
         <ThemedText>{unidadeSelecionada}</ThemedText>
         <Text style={{ fontSize: 18, color: textColor }}>▼</Text>
       </TouchableOpacity>
+
+      {/* Campo de quantidade */}
+      <View style={styles.campoContainer}>
+        <ThemedText style={styles.campoLabel}>Quantidade</ThemedText>
+        <TextInput
+          style={[
+            styles.input,
+            {
+              borderColor,
+              color: textColor,
+              backgroundColor: inputBackgroundColor,
+            },
+          ]}
+          value={quantidadeLocal}
+          onChangeText={atualizarQuantidade}
+          keyboardType="numeric"
+          placeholder="Ex: 1"
+          placeholderTextColor={textColor + "80"}
+        />
+      </View>
 
       {/* Campos adicionais para unidades compostas (caixa, pack, fardo) */}
       {["Caixa", "Pack", "Fardo"].includes(unidadeSelecionada) && (
