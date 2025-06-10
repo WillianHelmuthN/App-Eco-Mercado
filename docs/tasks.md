@@ -24,6 +24,11 @@
 - ✅ Desenvolvimento do componente UnidadeSelectorAvancado
 - ✅ Implementação da seleção de unidades de medida
 - ✅ Suporte para detalhes de embalagem com múltiplas unidades
+- ✅ Adição da funcionalidade para comparar múltiplos produtos
+- ✅ Implementação do cálculo de valor unitário para diferentes unidades
+- ✅ Desenvolvimento de lógica para determinar o melhor custo-benefício
+- ✅ Implementação da exibição de resultados com economia percentual
+- ✅ Suporte para adição/remoção de produtos da comparação
 
 ### Telas e Navegação
 
@@ -45,6 +50,18 @@
 - ⏳ Implementação da listagem de itens com categorização
 - ⏳ Funcionalidade para marcar/desmarcar itens como comprados
 
+### Fase 1.5 - Melhorias no Comparador de Preços
+
+- 📋 Melhorias de UI/UX no comparador de preços
+  - Adicionar feedback visual ao adicionar/remover produtos
+  - Melhorar mensagens de erro para unidades incompatíveis
+  - Implementar animações de transição ao mostrar resultados
+- 📋 Implementação de testes para o comparador de preços
+  - Adicionar testes unitários para as funções de cálculo
+  - Implementar testes de integração para o fluxo completo
+  - Testar com diversos cenários e casos extremos
+- 📋 Melhorias de acessibilidade no comparador de preços
+
 ### Fase 2 - Aprimoramento da Lista de Mercado
 
 - 📋 Implementação da funcionalidade de categorias
@@ -56,6 +73,9 @@
 ### Fase 3 - Integração e Recursos Avançados
 
 - 📋 Integração entre o comparador de preços e a lista de compras
+  - Adicionar opção para incluir produtos comparados diretamente na lista de compras
+  - Salvar histórico de comparações para referência futura
+  - Exibir produtos da lista de compras como opções no comparador
 - 📋 Implementação do compartilhamento de listas
 - 📋 Desenvolvimento de funcionalidades para marcação de produtos em promoção
 - 📋 Adição de estatísticas de economia e sugestões de economia
