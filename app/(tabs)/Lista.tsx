@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   Alert,
   FlatList,
+  Platform,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -28,12 +29,22 @@ export default function ListaComprasScreen() {
   const [itens, setItens] = useState<ItemCompra[]>([]);
   const [nomeProduto, setNomeProduto] = useState("");
   const [quantidade, setQuantidade] = useState("");
-  
+  const [forceUpdate, setForceUpdate] = useState(0); // Para forçar re-renderização
+
   // Cores baseadas no tema
   const textColor = useThemeColor({ light: "#000", dark: "#fff" }, "text");
-  const borderColor = useThemeColor({ light: "#ccc", dark: "#444" }, "background");
-  const inputBackgroundColor = useThemeColor({ light: "#f9f9f9", dark: "#2a2a2a" }, "background");
-  const placeholderColor = useThemeColor({ light: "#888", dark: "#999" }, "tabIconDefault");
+  const borderColor = useThemeColor(
+    { light: "#ccc", dark: "#444" },
+    "background"
+  );
+  const inputBackgroundColor = useThemeColor(
+    { light: "#f9f9f9", dark: "#2a2a2a" },
+    "background"
+  );
+  const placeholderColor = useThemeColor(
+    { light: "#888", dark: "#999" },
+    "tabIconDefault"
+  );
 
   // Carregar itens do AsyncStorage quando o componente montar
   useEffect(() => {
@@ -45,61 +56,132 @@ export default function ListaComprasScreen() {
     try {
       const dadosArmazenados = await AsyncStorage.getItem(STORAGE_KEY);
       if (dadosArmazenados !== null) {
-        setItens(JSON.parse(dadosArmazenados));
+        const itensCarregados = JSON.parse(dadosArmazenados);
+        console.log("Itens carregados do AsyncStorage:", itensCarregados);
+        setItens(itensCarregados);
+
+        // Forçar re-renderização para ambiente web
+        if (Platform.OS === "web") {
+          setForceUpdate((prev) => prev + 1);
+        }
+      } else {
+        console.log("Nenhum item encontrado no AsyncStorage");
       }
     } catch (erro) {
-      Alert.alert("Erro", "Não foi possível carregar os itens da lista");
-      console.error(erro);
+      console.error("Erro ao carregar itens:", erro);
+      if (Platform.OS === "web") {
+        alert("Não foi possível carregar os itens da lista");
+      } else {
+        Alert.alert("Erro", "Não foi possível carregar os itens da lista");
+      }
     }
   };
 
-  // Função para salvar itens no AsyncStorage
-  const salvarItens = async (novosItens: ItemCompra[]) => {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novosItens));
-    } catch (erro) {
-      Alert.alert("Erro", "Não foi possível salvar os itens da lista");
-      console.error(erro);
+  // Adicionar useEffect para monitorar mudanças nos itens para depuração
+  useEffect(() => {
+    if (Platform.OS === "web") {
+      console.log("Estado de itens atualizado:", itens);
     }
-  };
+  }, [itens, forceUpdate]);
 
   // Adicionar novo item à lista
-  const adicionarItem = () => {
+  const adicionarItem = async () => {
     if (nomeProduto.trim() === "") {
-      Alert.alert("Erro", "O nome do produto é obrigatório");
+      // Mensagem de erro adaptativa para web/mobile
+      if (Platform.OS === "web") {
+        alert("O nome do produto é obrigatório");
+      } else {
+        Alert.alert("Erro", "O nome do produto é obrigatório");
+      }
       return;
     }
 
-    const novoItem: ItemCompra = {
-      id: Date.now().toString(),
-      nome: nomeProduto,
-      quantidade: quantidade || "1", // Valor padrão se quantidade for vazia
-      dataAdicionado: new Date().toISOString(),
-    };
+    try {
+      const novoItem: ItemCompra = {
+        id: Date.now().toString(),
+        nome: nomeProduto,
+        quantidade: quantidade || "1", // Valor padrão se quantidade for vazia
+        dataAdicionado: new Date().toISOString(),
+      };
 
-    const novosItens = [...itens, novoItem];
-    setItens(novosItens);
-    salvarItens(novosItens);
+      // Criar novo array com todos os itens atuais + o novo item
+      const novosItens = [...itens, novoItem];
 
-    // Limpar campos
-    setNomeProduto("");
-    setQuantidade("");
+      // Primeiro persistir no AsyncStorage para garantir consistência
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novosItens));
+
+      // Depois atualizar o estado local
+      setItens(novosItens);
+
+      // Forçar re-renderização para ambiente web
+      if (Platform.OS === "web") {
+        setForceUpdate((prev) => prev + 1);
+      }
+
+      // Limpar campos
+      setNomeProduto("");
+      setQuantidade("");
+
+      console.log("Item adicionado com sucesso:", novoItem);
+    } catch (erro) {
+      console.error("Erro ao adicionar item:", erro);
+      if (Platform.OS === "web") {
+        alert("Não foi possível adicionar o item à lista");
+      } else {
+        Alert.alert("Erro", "Não foi possível adicionar o item à lista");
+      }
+    }
   };
 
   // Remover item da lista
   const removerItem = (id: string) => {
-    Alert.alert("Confirmar", "Deseja remover este item da lista?", [
-      { text: "Cancelar", style: "cancel" },
-      {
-        text: "Remover",
-        style: "destructive",
-        onPress: () => {
-          const novosItens = itens.filter((item) => item.id !== id);
-          setItens(novosItens);
-          salvarItens(novosItens);
+    console.log("Tentando remover item com id:", id);
+
+    // Tratamento diferente para web e dispositivos móveis
+    if (Platform.OS === "web") {
+      // No ambiente web, pular a confirmação ou usar confirm nativo
+      if (window.confirm("Deseja remover este item da lista?")) {
+        removerItemConfirmado(id);
+      }
+    } else {
+      // No ambiente mobile, usar Alert nativo
+      Alert.alert("Confirmar", "Deseja remover este item da lista?", [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Remover",
+          style: "destructive",
+          onPress: () => removerItemConfirmado(id),
         },
-      },
-    ]);
+      ]);
+    }
+  };
+
+  // Função para realizar a remoção após confirmação
+  const removerItemConfirmado = async (id: string) => {
+    try {
+      // Criar novo array sem o item a ser removido
+      const novosItens = itens.filter((item) => item.id !== id);
+      console.log("Itens após filtro:", novosItens);
+
+      // Atualizar o estado com o novo array
+      setItens(novosItens);
+
+      // Forçar re-renderização para ambiente web
+      if (Platform.OS === "web") {
+        setForceUpdate((prev) => prev + 1);
+      }
+
+      // Persistir mudanças no AsyncStorage
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novosItens));
+      console.log("Itens atualizados no AsyncStorage");
+    } catch (erro) {
+      console.error("Erro ao remover item:", erro);
+      if (Platform.OS === "web") {
+        alert("Ocorreu um erro ao remover o item");
+      } else {
+        Alert.alert("Erro", "Ocorreu um erro ao remover o item");
+      }
+    }
   };
   return (
     <ParallaxScrollView
@@ -157,6 +239,7 @@ export default function ListaComprasScreen() {
       {itens.length > 0 ? (
         <FlatList
           data={itens}
+          extraData={forceUpdate} // Forçar re-renderização quando forceUpdate mudar
           renderItem={({ item }) => (
             <ThemedView style={styles.itemContainer}>
               <ThemedView style={styles.itemInfo}>
@@ -166,16 +249,21 @@ export default function ListaComprasScreen() {
                 <ThemedText>Qtd: {item.quantidade}</ThemedText>
               </ThemedView>
               <TouchableOpacity
-                onPress={() => removerItem(item.id)}
+                onPress={() => {
+                  console.log("Botão de remover clicado para id:", item.id);
+                  removerItem(item.id);
+                }}
                 style={styles.removerBtn}
+                activeOpacity={0.6}
               >
                 <ThemedText style={styles.removerBtnTexto}>✕</ThemedText>
               </TouchableOpacity>
             </ThemedView>
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => `item-${item.id}`}
           style={styles.lista}
           scrollEnabled={false}
+          removeClippedSubviews={false} // Melhora o comportamento no web
         />
       ) : (
         <ThemedView style={styles.listaVazia}>
@@ -258,17 +346,23 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   removerBtn: {
-    width: 36,
-    height: 36,
+    width: 40,
+    height: 40,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 18,
+    borderRadius: 20,
     backgroundColor: "#ff6b6b",
+    marginLeft: 10,
+    // Melhorias para web
+    cursor: "pointer",
   },
   removerBtnTexto: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+    textAlign: "center",
+    // Melhorias para web
+    userSelect: "none",
   },
   listaVazia: {
     padding: 20,
