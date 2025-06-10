@@ -167,6 +167,14 @@ export const UnidadeSelectorAvancado: React.FC<
         quantidadePorUnidade: "1",
         unidadeInterna: "Unidade",
       });
+    } else {
+      // Se a unidade interna atual é uma embalagem, define para uma unidade adequada
+      if (["Caixa", "Pack", "Fardo"].includes(detalhes.unidadeInterna)) {
+        atualizarDetalhes({
+          ...detalhes,
+          unidadeInterna: "Unidade",
+        });
+      }
     }
   };
 
@@ -192,6 +200,11 @@ export const UnidadeSelectorAvancado: React.FC<
   );
 
   // Renderiza cada item da lista de unidades internas
+  // Filtra as unidades que não devem aparecer como unidade interna (Caixa, Pack, Fardo)
+  const unidadesInternasDisponiveis = unidadesDisponiveis.filter(
+    (unidade) => !["Caixa", "Pack", "Fardo"].includes(unidade)
+  );
+
   const renderItemUnidadeInterna = ({ item }: { item: UnidadeMedida }) => (
     <TouchableOpacity
       style={[
@@ -377,7 +390,7 @@ export const UnidadeSelectorAvancado: React.FC<
             </View>
 
             <FlatList
-              data={unidadesDisponiveis}
+              data={unidadesInternasDisponiveis}
               renderItem={renderItemUnidadeInterna}
               keyExtractor={(item) => item}
             />
