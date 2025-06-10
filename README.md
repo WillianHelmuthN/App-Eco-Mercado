@@ -1,15 +1,24 @@
-# 📱 Product Price Comparator
+# 📱 Eco-Mercado
 
-This is a simple React Native application developed using [Expo](https://expo.dev). Its primary purpose is to help users easily compare the price efficiency of products sold in different packages or units, determining the best value per unit (such as grams, milliliters, or items).
+Este é um aplicativo desenvolvido em React Native utilizando [Expo](https://expo.dev). Seu principal objetivo é auxiliar usuários a economizar nas compras através de funcionalidades de comparação de preços e gerenciamento de listas de compras.
 
-## Features
+## Funcionalidades Principais
 
-* Dynamically handles various measurement units (grams, kilograms, milliliters, liters, units, boxes, packs, etc.).
-* Calculates and displays the most cost-effective purchasing option.
-* Allows detailed comparisons for packages containing multiple sub-units (e.g., a pack containing several smaller units).
-* Intended for easy integration with price comparison reports.
+### Comparador de Preços
+* Manipulação dinâmica de diversas unidades de medida (gramas, quilogramas, mililitros, litros, unidades, caixas, packs, etc.).
+* Cálculo e exibição da opção de compra mais econômica.
+* Permite comparações detalhadas de pacotes contendo múltiplas subunidades (ex: fardos com várias unidades menores).
+* Cálculo de economia percentual entre diferentes opções.
+* [Documentação detalhada do Comparador de Preços](./features/comparador-precos/README.md)
 
-## Get started
+### Lista de Mercado (Em desenvolvimento)
+* Armazenamento local de listas de compras com SQLite.
+* Categorização e priorização de itens.
+* Acompanhamento do status de compra.
+* Histórico de compras e estimativa de preços.
+* Sugestões inteligentes baseadas no histórico.
+
+## Como iniciar
 
 1. Install dependencies
 
@@ -88,17 +97,21 @@ Isso abre opções para:
 
 Comece editando os arquivos no diretório **app**. Este projeto utiliza [roteamento baseado em arquivos](https://docs.expo.dev/router/introduction).
 
-## Reiniciar Projeto
+## Estrutura do Projeto
 
-Quando estiver pronto, execute:
-
-```bash
-npm run reset-project
 ```
-
-Este comando move o código inicial para o diretório **app-example** e cria um novo diretório **app** vazio.
-
-## Documentação e Recursos
+├── app/                # Telas e navegação (expo-router)
+├── assets/             # Recursos estáticos (imagens, fontes)
+├── components/         # Componentes reutilizáveis
+├── constants/          # Constantes e cores
+├── docs/               # Documentação do projeto
+├── features/           # Funcionalidades principais
+│   └── comparador-precos/ # Comparador de preços
+│       ├── components/ # Componentes do comparador
+│       ├── hooks/      # Hooks personalizados 
+│       └── utils/      # Funções utilitárias
+└── hooks/              # Hooks globais da aplicação
+```
 
 * [Documentação Expo](https://docs.expo.dev/)
 * [Tutorial Learn Expo](https://docs.expo.dev/tutorial/introduction/)
