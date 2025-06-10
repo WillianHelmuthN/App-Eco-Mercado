@@ -1,14 +1,106 @@
-import { Image } from "expo-image";
-import { Platform, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 
-import { Collapsible } from "@/components/Collapsible";
-import { ExternalLink } from "@/components/ExternalLink";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { IconSymbol } from "@/components/ui/IconSymbol";
+import { useThemeColor } from "@/hooks/useThemeColor";
+
+// Interface para o item da lista de compras
+interface ItemCompra {
+  id: string;
+  nome: string;
+  quantidade: string;
+  dataAdicionado: string; // Data armazenada mas não exibida para o usuário
+}
+
+const STORAGE_KEY = "@eco_mercado_lista_compras";
 
 export default function ListaComprasScreen() {
+  const [itens, setItens] = useState<ItemCompra[]>([]);
+  const [nomeProduto, setNomeProduto] = useState("");
+  const [quantidade, setQuantidade] = useState("");
+  
+  // Cores baseadas no tema
+  const textColor = useThemeColor({ light: "#000", dark: "#fff" }, "text");
+  const borderColor = useThemeColor({ light: "#ccc", dark: "#444" }, "background");
+  const inputBackgroundColor = useThemeColor({ light: "#f9f9f9", dark: "#2a2a2a" }, "background");
+  const placeholderColor = useThemeColor({ light: "#888", dark: "#999" }, "tabIconDefault");
+
+  // Carregar itens do AsyncStorage quando o componente montar
+  useEffect(() => {
+    carregarItens();
+  }, []);
+
+  // Função para carregar itens do AsyncStorage
+  const carregarItens = async () => {
+    try {
+      const dadosArmazenados = await AsyncStorage.getItem(STORAGE_KEY);
+      if (dadosArmazenados !== null) {
+        setItens(JSON.parse(dadosArmazenados));
+      }
+    } catch (erro) {
+      Alert.alert("Erro", "Não foi possível carregar os itens da lista");
+      console.error(erro);
+    }
+  };
+
+  // Função para salvar itens no AsyncStorage
+  const salvarItens = async (novosItens: ItemCompra[]) => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novosItens));
+    } catch (erro) {
+      Alert.alert("Erro", "Não foi possível salvar os itens da lista");
+      console.error(erro);
+    }
+  };
+
+  // Adicionar novo item à lista
+  const adicionarItem = () => {
+    if (nomeProduto.trim() === "") {
+      Alert.alert("Erro", "O nome do produto é obrigatório");
+      return;
+    }
+
+    const novoItem: ItemCompra = {
+      id: Date.now().toString(),
+      nome: nomeProduto,
+      quantidade: quantidade || "1", // Valor padrão se quantidade for vazia
+      dataAdicionado: new Date().toISOString(),
+    };
+
+    const novosItens = [...itens, novoItem];
+    setItens(novosItens);
+    salvarItens(novosItens);
+
+    // Limpar campos
+    setNomeProduto("");
+    setQuantidade("");
+  };
+
+  // Remover item da lista
+  const removerItem = (id: string) => {
+    Alert.alert("Confirmar", "Deseja remover este item da lista?", [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Remover",
+        style: "destructive",
+        onPress: () => {
+          const novosItens = itens.filter((item) => item.id !== id);
+          setItens(novosItens);
+          salvarItens(novosItens);
+        },
+      },
+    ]);
+  };
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
@@ -24,92 +116,72 @@ export default function ListaComprasScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Lista de Compras</ThemedText>
       </ThemedView>
-      <ThemedText>Aqui você pode organizar a sua lista de compras.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          and{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{" "}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the
-          web version, press <ThemedText type="defaultSemiBold">w</ThemedText>{" "}
-          in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the{" "}
-          <ThemedText type="defaultSemiBold">@2x</ThemedText> and{" "}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to
-          provide files for different screen densities
-        </ThemedText>
-        <Image
-          source={require("@/assets/images/react-logo.png")}
-          style={{ alignSelf: "center" }}
+
+      {/* Formulário para adicionar novo item */}
+      <ThemedView style={styles.formContainer}>
+        <TextInput
+          style={[
+            styles.input,
+            {
+              borderColor: borderColor,
+              color: textColor,
+              backgroundColor: inputBackgroundColor,
+            },
+          ]}
+          placeholder="Nome do produto"
+          value={nomeProduto}
+          onChangeText={setNomeProduto}
+          placeholderTextColor={placeholderColor}
         />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText>{" "}
-          to see how to load{" "}
-          <ThemedText style={{ fontFamily: "SpaceMono" }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{" "}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook
-          lets you inspect what the user&apos;s current color scheme is, and so
-          you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{" "}
-          <ThemedText type="defaultSemiBold">
-            components/HelloWave.tsx
-          </ThemedText>{" "}
-          component uses the powerful{" "}
-          <ThemedText type="defaultSemiBold">
-            react-native-reanimated
-          </ThemedText>{" "}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The{" "}
-              <ThemedText type="defaultSemiBold">
-                components/ParallaxScrollView.tsx
-              </ThemedText>{" "}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
+        <TextInput
+          style={[
+            styles.inputQuantidade,
+            {
+              borderColor: borderColor,
+              color: textColor,
+              backgroundColor: inputBackgroundColor,
+            },
+          ]}
+          placeholder="Quantidade"
+          value={quantidade}
+          onChangeText={setQuantidade}
+          keyboardType="numeric"
+          placeholderTextColor={placeholderColor}
+        />
+        <TouchableOpacity style={styles.addButton} onPress={adicionarItem}>
+          <ThemedText style={styles.addButtonText}>Adicionar</ThemedText>
+        </TouchableOpacity>
+      </ThemedView>
+
+      {/* Lista de itens */}
+      {itens.length > 0 ? (
+        <FlatList
+          data={itens}
+          renderItem={({ item }) => (
+            <ThemedView style={styles.itemContainer}>
+              <ThemedView style={styles.itemInfo}>
+                <ThemedText type="defaultSemiBold" style={styles.itemNome}>
+                  {item.nome}
+                </ThemedText>
+                <ThemedText>Qtd: {item.quantidade}</ThemedText>
+              </ThemedView>
+              <TouchableOpacity
+                onPress={() => removerItem(item.id)}
+                style={styles.removerBtn}
+              >
+                <ThemedText style={styles.removerBtnTexto}>✕</ThemedText>
+              </TouchableOpacity>
+            </ThemedView>
+          )}
+          keyExtractor={(item) => item.id}
+          style={styles.lista}
+          scrollEnabled={false}
+        />
+      ) : (
+        <ThemedView style={styles.listaVazia}>
+          <ThemedText>Sua lista de compras está vazia</ThemedText>
+        </ThemedView>
+      )}
     </ParallaxScrollView>
   );
 }
@@ -124,5 +196,84 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
     gap: 8,
+    marginBottom: 20,
+    marginTop: 20,
+    paddingHorizontal: 16,
+  },
+  formContainer: {
+    padding: 16,
+    marginBottom: 20,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  input: {
+    height: 48,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    marginBottom: 12,
+  },
+  inputQuantidade: {
+    height: 48,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    marginBottom: 16,
+  },
+  addButton: {
+    backgroundColor: "#4a9f6e",
+    padding: 14,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  addButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  lista: {
+    marginBottom: 20,
+  },
+  itemContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    marginHorizontal: 16,
+    marginBottom: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },
+  itemInfo: {
+    flex: 1,
+  },
+  itemNome: {
+    marginBottom: 4,
+  },
+  removerBtn: {
+    width: 36,
+    height: 36,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 18,
+    backgroundColor: "#ff6b6b",
+  },
+  removerBtnTexto: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  listaVazia: {
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
   },
 });
