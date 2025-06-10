@@ -166,3 +166,42 @@ export const calcularTotalComQuantidade = (
     Number(detalhesEmbalagem.quantidadePorUnidade)
   );
 };
+
+/**
+ * Extrai apenas o valor numérico do valor unitário calculado (remove o texto "R$ X.XX por Y")
+ * @param valorUnitarioTexto Texto do valor unitário
+ * @returns Valor numérico
+ */
+export const extrairValorNumericoDeTextoUnitario = (
+  valorUnitarioTexto: string
+): number => {
+  // Extrai o valor entre "R$ " e " por"
+  const match = valorUnitarioTexto.match(/R\$ ([\d,\.]+) por/);
+  if (match && match[1]) {
+    return parseFloat(match[1].replace(",", "."));
+  }
+  return 0;
+};
+
+/**
+ * Calcula a diferença percentual entre dois valores
+ * @param valorMaior Valor maior
+ * @param valorMenor Valor menor
+ * @returns Diferença percentual
+ */
+export const calcularDiferencaPercentual = (
+  valorMaior: number,
+  valorMenor: number
+): number => {
+  if (valorMenor === 0) return 0;
+  return ((valorMaior - valorMenor) / valorMaior) * 100;
+};
+
+/**
+ * Formata a diferença percentual para exibição
+ * @param diferenca Diferença percentual
+ * @returns Texto formatado
+ */
+export const formatarDiferencaPercentual = (diferenca: number): string => {
+  return `${diferenca.toFixed(2).replace(".", ",")}%`;
+};

@@ -31,7 +31,6 @@ export function ComparadorPrecos() {
     removerProduto,
     exibirBotaoComparar,
     resultadoComparacaoVisivel,
-    setResultadoComparacaoVisivel,
     compararProdutos,
   } = useComparadorPrecos();
 
@@ -48,7 +47,9 @@ export function ComparadorPrecos() {
         </ThemedView>
 
         <ThemedView style={styles.stepContainer}>
-          <ThemedText type="subtitle">Selecione a Unidade do Produto</ThemedText>
+          <ThemedText type="subtitle">
+            Selecione a Unidade do Produto
+          </ThemedText>
           <ThemedText>
             Escolha a unidade de medida para comparação de preços:
           </ThemedText>
@@ -83,7 +84,9 @@ export function ComparadorPrecos() {
           </ThemedText>
 
           {/* Exibe o valor unitário calculado quando o valor estiver informado */}
-          {valor && <ValorUnitarioInfo valorUnitario={valorUnitarioCalculado} />}
+          {valor && (
+            <ValorUnitarioInfo valorUnitario={valorUnitarioCalculado} />
+          )}
 
           {/* Exibe informações baseadas no tipo de unidade selecionada */}
           {!isEmbalagem && (
@@ -100,7 +103,7 @@ export function ComparadorPrecos() {
               unidadeSelecionada={unidadeSelecionada}
             />
           )}
-          
+
           {/* Botão de adicionar produto */}
           <View style={styles.buttonContainer}>
             <Button
@@ -109,7 +112,7 @@ export function ComparadorPrecos() {
               disabled={!valor}
             />
           </View>
-          
+
           {/* Botão de comparar (aparece apenas quando há mais de 1 produto) */}
           {exibirBotaoComparar && (
             <View style={styles.buttonContainer}>
@@ -120,19 +123,19 @@ export function ComparadorPrecos() {
               />
             </View>
           )}
-          
+
           {/* Exibe o resultado da comparação quando solicitado */}
           {resultadoComparacaoVisivel && produtos.length > 1 && (
             <ResultadoComparacao produtos={produtos} />
           )}
-          
+
           {/* Lista de produtos adicionados */}
           {produtos.length > 0 && (
             <ThemedView style={styles.produtosContainer}>
               <ThemedText type="subtitle" style={styles.produtosTitle}>
                 Produtos para Comparação
               </ThemedText>
-              
+
               {produtos.map((produto, index) => (
                 <ProdutoComparacaoItem
                   key={produto.id}
