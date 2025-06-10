@@ -114,7 +114,7 @@ export function useComparadorPrecos() {
       return false;
     }
 
-    // Se uma é embalagem e a outra não, verificar a unidade interna
+    // Se uma é embalagem e a outra não, verificar a unidade interna com a unidade simples
     if (
       ["Caixa", "Pack", "Fardo"].includes(unidade1) !==
       ["Caixa", "Pack", "Fardo"].includes(unidade2)
@@ -126,22 +126,18 @@ export function useComparadorPrecos() {
         ? unidade2
         : unidade1;
 
+      // Caso especial: se a unidade simples é "Unidade" e a unidade interna da embalagem também é "Unidade"
+      if (unidadeSimples === "Unidade" && embalagemDetalhes.unidadeInterna === "Unidade") {
+        return true;
+      }
+
       // Verificar se a unidade interna da embalagem é compatível com a unidade simples
       if (
-        grupoMassa.includes(embalagemDetalhes.unidadeInterna) &&
-        grupoMassa.includes(unidadeSimples)
-      )
+        (grupoMassa.includes(embalagemDetalhes.unidadeInterna) && grupoMassa.includes(unidadeSimples)) ||
+        (grupoVolume.includes(embalagemDetalhes.unidadeInterna) && grupoVolume.includes(unidadeSimples))
+      ) {
         return true;
-      if (
-        grupoVolume.includes(embalagemDetalhes.unidadeInterna) &&
-        grupoVolume.includes(unidadeSimples)
-      )
-        return true;
-      if (
-        grupoUnidades.includes(embalagemDetalhes.unidadeInterna) &&
-        grupoUnidades.includes(unidadeSimples)
-      )
-        return true;
+      }
 
       return false;
     }

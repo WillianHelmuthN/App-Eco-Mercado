@@ -205,3 +205,34 @@ export const calcularDiferencaPercentual = (
 export const formatarDiferencaPercentual = (diferenca: number): string => {
   return `${diferenca.toFixed(2).replace(".", ",")}%`;
 };
+
+/**
+ * Normaliza o valor unitário para comparação, considerando embalagens e unidades individuais
+ * @param produto Produto para normalização
+ * @returns Valor unitário normalizado para comparação
+ */
+export const normalizarValorUnitarioParaComparacao = (
+  unidadeSelecionada: UnidadeMedida,
+  valorFormatado: string,
+  quantidade: string,
+  isEmbalagem: boolean,
+  detalhesEmbalagem?: DetalhesEmbalagem
+): number => {
+  // Extrai o valor numérico básico
+  const valorNumerico = extrairValorNumericoDeTextoUnitario(valorFormatado);
+  
+  if (!isEmbalagem) {
+    // Para unidades simples, o valor já está normalizado
+    return valorNumerico;
+  }
+  
+  if (!detalhesEmbalagem) {
+    return valorNumerico;
+  }
+  
+  // Se estivermos comparando uma embalagem com uma unidade individual
+  // não precisamos fazer ajustes adicionais, pois o valor unitário já
+  // foi calculado na função calcularValorUnitarioEmbalagem
+  
+  return valorNumerico;
+};

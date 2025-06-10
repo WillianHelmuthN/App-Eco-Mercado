@@ -5,8 +5,8 @@ import { StyleSheet, View } from "react-native";
 import { ProdutoComparacao } from "../hooks/useComparadorPrecos";
 import {
   calcularDiferencaPercentual,
-  extrairValorNumericoDeTextoUnitario,
   formatarDiferencaPercentual,
+  normalizarValorUnitarioParaComparacao
 } from "../utils/calculosUnidades";
 
 interface ResultadoComparacaoProps {
@@ -22,13 +22,28 @@ export function ResultadoComparacao({ produtos }: ResultadoComparacaoProps) {
   }
 
   // Extrai os valores unitários numéricos
-  const valoresUnitarios = produtos.map((produto) => ({
-    id: produto.id,
-    valor: extrairValorNumericoDeTextoUnitario(produto.valorUnitarioCalculado),
-    textoValorUnitario: produto.valorUnitarioCalculado,
-    unidade: produto.unidadeSelecionada,
-    index: produtos.indexOf(produto),
-  }));
+  const valoresUnitarios = produtos.map((produto) => {
+    // Utiliza a função normalizarValorUnitarioParaComparacao para obter o valor correto
+    const valorNormalizado = produto.valorUnitarioCalculado.includes("Informe um valor") 
+      ? 0 
+      : normalizarValorUnitarioParaComparacao(
+          produto.unidadeSelecionada,
+          produto.valorUnitarioCalculado,
+          produto.quantidade,
+          produto.isEmbalagem,
+          produto.isEmbalagem ? produto.detalhesEmbalagem : undefined
+        );
+        
+    return {
+      id: produto.id,
+      valor: valorNormalizado,
+      textoValorUnitario: produto.valorUnitarioCalculado,
+      unidade: produto.unidadeSelecionada,
+      isEmbalagem: produto.isEmbalagem,
+      detalhesEmbalagem: produto.isEmbalagem ? produto.detalhesEmbalagem : null,
+      index: produtos.indexOf(produto),
+    };
+  });
 
   // Encontra o produto mais barato (menor valor unitário)
   const produtoMaisBarato = [...valoresUnitarios].sort(
@@ -51,6 +66,31 @@ export function ResultadoComparacao({ produtos }: ResultadoComparacaoProps) {
 
   // Define o índice de referência (o primeiro produto adicionado)
   const produtoReferencia = valoresUnitarios.find((p) => p.index === 0);
+  
+  // Prepara o texto de descrição do produto mais vantajoso
+  const descricaoProdutoMaisBarato = () => {
+    const produto = produtos[produtoMaisBarato.index];
+    
+    if (produto.isEmbalagem) {
+      return (
+        <ThemedText>
+          {produtoMaisBarato.index === 0
+            ? "Produto de Referência"
+            : `Produto ${produtoMaisBarato.index + 1}`}{" "}
+          ({produto.unidadeSelecionada} com {produto.detalhesEmbalagem.quantidadeUnidades} unidades de{" "}
+          {produto.detalhesEmbalagem.quantidadePorUnidade} {produto.detalhesEmbalagem.unidadeInterna} cada) - {produtoMaisBarato.textoValorUnitario}
+        </ThemedText>
+      );
+    } else {
+      return (
+        <ThemedText>
+          {produtoMaisBarato.index === 0
+            ? "Produto de Referência"
+            : `Produto ${produtoMaisBarato.index + 1}`} ({produto.unidadeSelecionada}) - {produtoMaisBarato.textoValorUnitario}
+        </ThemedText>
+      );
+    }
+  };
 
   return (
     <ThemedView style={styles.container}>
@@ -60,12 +100,7 @@ export function ResultadoComparacao({ produtos }: ResultadoComparacaoProps) {
 
       <View style={styles.resultadoContainer}>
         <ThemedText type="defaultSemiBold">Produto mais vantajoso:</ThemedText>
-        <ThemedText>
-          {produtoMaisBarato.index === 0
-            ? "Produto de Referência"
-            : `Produto ${produtoMaisBarato.index + 1}`}{" "}
-          - {produtoMaisBarato.textoValorUnitario}
-        </ThemedText>
+        {descricaoProdutoMaisBarato()}
       </View>
 
       {produtoReferencia && produtoReferencia.id !== produtoMaisBarato.id && (
@@ -75,8 +110,18 @@ export function ResultadoComparacao({ produtos }: ResultadoComparacaoProps) {
           </ThemedText>
           <ThemedText>
             {produtoMaisBarato.valor < produtoReferencia.valor
-              ? `Economia de ${formatarDiferencaPercentual(calcularDiferencaPercentual(produtoReferencia.valor, produtoMaisBarato.valor))}`
-              : `Mais caro em ${formatarDiferencaPercentual(calcularDiferencaPercentual(produtoMaisBarato.valor, produtoReferencia.valor))}`}
+              ? `Economia de ${formatarDiferencaPercentual(
+                  calcularDiferencaPercentual(
+                    produtoReferencia.valor,
+                    produtoMaisBarato.valor
+                  )
+                )}`
+              : `Mais caro em ${formatarDiferencaPercentual(
+                  calcularDiferencaPercentual(
+                    produtoMaisBarato.valor,
+                    produtoReferencia.valor
+                  )
+                )}`}
           </ThemedText>
         </View>
       )}
@@ -89,7 +134,8 @@ export function ResultadoComparacao({ produtos }: ResultadoComparacaoProps) {
       </View>
 
       <ThemedText style={styles.notaTexto}>
-        Nota: A comparação considera o valor unitário por unidade padrão.
+        Nota: A comparação considera o valor unitário por unidade padrão, 
+        convertendo embalagens para seu valor por unidade básica.
       </ThemedText>
     </ThemedView>
   );
