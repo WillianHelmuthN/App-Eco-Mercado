@@ -6,7 +6,7 @@ import { ProdutoComparacao } from "../hooks/useComparadorPrecos";
 import {
   calcularDiferencaPercentual,
   formatarDiferencaPercentual,
-  normalizarValorUnitarioParaComparacao
+  normalizarValorUnitarioParaComparacao,
 } from "../utils/calculosUnidades";
 
 interface ResultadoComparacaoProps {
@@ -24,8 +24,10 @@ export function ResultadoComparacao({ produtos }: ResultadoComparacaoProps) {
   // Extrai os valores unitários numéricos
   const valoresUnitarios = produtos.map((produto) => {
     // Utiliza a função normalizarValorUnitarioParaComparacao para obter o valor correto
-    const valorNormalizado = produto.valorUnitarioCalculado.includes("Informe um valor") 
-      ? 0 
+    const valorNormalizado = produto.valorUnitarioCalculado.includes(
+      "Informe um valor"
+    )
+      ? 0
       : normalizarValorUnitarioParaComparacao(
           produto.unidadeSelecionada,
           produto.valorUnitarioCalculado,
@@ -33,7 +35,7 @@ export function ResultadoComparacao({ produtos }: ResultadoComparacaoProps) {
           produto.isEmbalagem,
           produto.isEmbalagem ? produto.detalhesEmbalagem : undefined
         );
-        
+
     return {
       id: produto.id,
       valor: valorNormalizado,
@@ -66,19 +68,22 @@ export function ResultadoComparacao({ produtos }: ResultadoComparacaoProps) {
 
   // Define o índice de referência (o primeiro produto adicionado)
   const produtoReferencia = valoresUnitarios.find((p) => p.index === 0);
-  
+
   // Prepara o texto de descrição do produto mais vantajoso
   const descricaoProdutoMaisBarato = () => {
     const produto = produtos[produtoMaisBarato.index];
-    
+
     if (produto.isEmbalagem) {
       return (
         <ThemedText>
           {produtoMaisBarato.index === 0
             ? "Produto de Referência"
             : `Produto ${produtoMaisBarato.index + 1}`}{" "}
-          ({produto.unidadeSelecionada} com {produto.detalhesEmbalagem.quantidadeUnidades} unidades de{" "}
-          {produto.detalhesEmbalagem.quantidadePorUnidade} {produto.detalhesEmbalagem.unidadeInterna} cada) - {produtoMaisBarato.textoValorUnitario}
+          ({produto.unidadeSelecionada} com{" "}
+          {produto.detalhesEmbalagem.quantidadeUnidades} unidades de{" "}
+          {produto.detalhesEmbalagem.quantidadePorUnidade}{" "}
+          {produto.detalhesEmbalagem.unidadeInterna} cada) -{" "}
+          {produtoMaisBarato.textoValorUnitario}
         </ThemedText>
       );
     } else {
@@ -86,7 +91,9 @@ export function ResultadoComparacao({ produtos }: ResultadoComparacaoProps) {
         <ThemedText>
           {produtoMaisBarato.index === 0
             ? "Produto de Referência"
-            : `Produto ${produtoMaisBarato.index + 1}`} ({produto.unidadeSelecionada}) - {produtoMaisBarato.textoValorUnitario}
+            : `Produto ${produtoMaisBarato.index + 1}`}{" "}
+          ({produto.unidadeSelecionada}) -{" "}
+          {produtoMaisBarato.textoValorUnitario}
         </ThemedText>
       );
     }
@@ -134,7 +141,7 @@ export function ResultadoComparacao({ produtos }: ResultadoComparacaoProps) {
       </View>
 
       <ThemedText style={styles.notaTexto}>
-        Nota: A comparação considera o valor unitário por unidade padrão, 
+        Nota: A comparação considera o valor unitário por unidade padrão,
         convertendo embalagens para seu valor por unidade básica.
       </ThemedText>
     </ThemedView>

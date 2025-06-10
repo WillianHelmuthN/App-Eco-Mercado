@@ -127,14 +127,19 @@ export function useComparadorPrecos() {
         : unidade1;
 
       // Caso especial: se a unidade simples é "Unidade" e a unidade interna da embalagem também é "Unidade"
-      if (unidadeSimples === "Unidade" && embalagemDetalhes.unidadeInterna === "Unidade") {
+      if (
+        unidadeSimples === "Unidade" &&
+        embalagemDetalhes.unidadeInterna === "Unidade"
+      ) {
         return true;
       }
 
       // Verificar se a unidade interna da embalagem é compatível com a unidade simples
       if (
-        (grupoMassa.includes(embalagemDetalhes.unidadeInterna) && grupoMassa.includes(unidadeSimples)) ||
-        (grupoVolume.includes(embalagemDetalhes.unidadeInterna) && grupoVolume.includes(unidadeSimples))
+        (grupoMassa.includes(embalagemDetalhes.unidadeInterna) &&
+          grupoMassa.includes(unidadeSimples)) ||
+        (grupoVolume.includes(embalagemDetalhes.unidadeInterna) &&
+          grupoVolume.includes(unidadeSimples))
       ) {
         return true;
       }

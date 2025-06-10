@@ -220,19 +220,19 @@ export const normalizarValorUnitarioParaComparacao = (
 ): number => {
   // Extrai o valor numérico básico
   const valorNumerico = extrairValorNumericoDeTextoUnitario(valorFormatado);
-  
+
   if (!isEmbalagem) {
     // Para unidades simples, o valor já está normalizado
     return valorNumerico;
   }
-  
+
   if (!detalhesEmbalagem) {
     return valorNumerico;
   }
-  
+
   // Se estivermos comparando uma embalagem com uma unidade individual
   // não precisamos fazer ajustes adicionais, pois o valor unitário já
   // foi calculado na função calcularValorUnitarioEmbalagem
-  
+
   return valorNumerico;
 };
