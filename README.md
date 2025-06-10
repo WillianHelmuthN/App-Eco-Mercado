@@ -18,51 +18,6 @@ Este é um aplicativo desenvolvido em React Native utilizando [Expo](https://exp
 * Histórico de compras e estimativa de preços.
 * Sugestões inteligentes baseadas no histórico.
 
-## Como iniciar
-
-1. Install dependencies
-
-```bash
-npm install
-```
-
-2. Start the app
-
-```bash
-npx expo start
-```
-
-This opens options for:
-
-* [Development build](https://docs.expo.dev/develop/development-builds/introduction/)
-* [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-* [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-* [Expo Go](https://expo.dev/go)
-
-Start developing by editing files in the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Reset Project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command moves starter code to the **app-example** directory and creates a new blank **app** directory.
-
-## Documentation & Resources
-
-* [Expo documentation](https://docs.expo.dev/)
-* [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/)
-
-## Join the community
-
-* [Expo GitHub](https://github.com/expo/expo)
-* [Discord community](https://chat.expo.dev)
-
----
-
 # 📱 Comparador de Preços de Produtos
 
 Este é um aplicativo simples desenvolvido em React Native utilizando [Expo](https://expo.dev). Seu principal objetivo é auxiliar usuários a comparar facilmente o custo-benefício de produtos vendidos em diferentes embalagens ou unidades, determinando qual a melhor opção de compra por unidade (gramas, mililitros ou itens).
