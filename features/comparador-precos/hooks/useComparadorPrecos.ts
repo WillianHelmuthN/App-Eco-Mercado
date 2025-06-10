@@ -71,6 +71,19 @@ export function useComparadorPrecos() {
   const removerProduto = (id: string) => {
     setProdutos(produtos.filter(produto => produto.id !== id));
   };
+  
+  // Variável que controla se o botão de comparar deve ser exibido
+  const exibirBotaoComparar = produtos.length > 1;
+  
+  // Estado para controlar se o resultado da comparação está visível
+  const [resultadoComparacaoVisivel, setResultadoComparacaoVisivel] = useState(false);
+  
+  // Função para iniciar a comparação
+  const compararProdutos = () => {
+    if (produtos.length > 1) {
+      setResultadoComparacaoVisivel(true);
+    }
+  };
 
   return {
     // Estado
@@ -93,5 +106,11 @@ export function useComparadorPrecos() {
     produtos,
     adicionarProduto,
     removerProduto,
+    
+    // Comparação
+    exibirBotaoComparar,
+    resultadoComparacaoVisivel,
+    setResultadoComparacaoVisivel,
+    compararProdutos,
   };
 }

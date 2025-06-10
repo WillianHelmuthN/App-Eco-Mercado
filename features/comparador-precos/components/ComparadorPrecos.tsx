@@ -9,6 +9,7 @@ import {
   ValorUnitarioInfo,
 } from "./InfoContainers";
 import { ProdutoComparacaoItem } from "./ProdutoComparacaoItem";
+import { ResultadoComparacao } from "./ResultadoComparacao";
 
 /**
  * Componente principal do comparador de preços
@@ -28,6 +29,10 @@ export function ComparadorPrecos() {
     produtos,
     adicionarProduto,
     removerProduto,
+    exibirBotaoComparar,
+    resultadoComparacaoVisivel,
+    setResultadoComparacaoVisivel,
+    compararProdutos,
   } = useComparadorPrecos();
 
   return (
@@ -104,6 +109,22 @@ export function ComparadorPrecos() {
               disabled={!valor}
             />
           </View>
+          
+          {/* Botão de comparar (aparece apenas quando há mais de 1 produto) */}
+          {exibirBotaoComparar && (
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Comparar Produtos"
+                onPress={compararProdutos}
+                color="#28a745"
+              />
+            </View>
+          )}
+          
+          {/* Exibe o resultado da comparação quando solicitado */}
+          {resultadoComparacaoVisivel && produtos.length > 1 && (
+            <ResultadoComparacao produtos={produtos} />
+          )}
           
           {/* Lista de produtos adicionados */}
           {produtos.length > 0 && (
