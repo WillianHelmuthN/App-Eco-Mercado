@@ -5,29 +5,18 @@ Este é um aplicativo desenvolvido em React Native utilizando [Expo](https://exp
 ## Funcionalidades Principais
 
 ### Comparador de Preços
-* Manipulação dinâmica de diversas unidades de medida (gramas, quilogramas, mililitros, litros, unidades, caixas, packs, etc.).
-* Cálculo e exibição da opção de compra mais econômica.
-* Permite comparações detalhadas de pacotes contendo múltiplas subunidades (ex: fardos com várias unidades menores).
-* Cálculo de economia percentual entre diferentes opções.
-* [Documentação detalhada do Comparador de Preços](./features/comparador-precos/README.md)
+
+- Manipulação dinâmica de diversas unidades de medida (gramas, quilogramas, mililitros, litros, unidades, caixas, packs, etc.).
+- Cálculo e exibição da opção de compra mais econômica.
+- Permite comparações detalhadas de pacotes contendo múltiplas subunidades (ex: fardos com várias unidades menores).
+- Cálculo de economia percentual entre diferentes opções.
+- [Documentação detalhada do Comparador de Preços](./features/comparador-precos/README.md)
 
 ### Lista de Mercado (Em desenvolvimento)
-* Armazenamento local de listas de compras com SQLite.
-* Categorização e priorização de itens.
-* Acompanhamento do status de compra.
-* Histórico de compras e estimativa de preços.
-* Sugestões inteligentes baseadas no histórico.
 
-# 📱 Comparador de Preços de Produtos
-
-Este é um aplicativo simples desenvolvido em React Native utilizando [Expo](https://expo.dev). Seu principal objetivo é auxiliar usuários a comparar facilmente o custo-benefício de produtos vendidos em diferentes embalagens ou unidades, determinando qual a melhor opção de compra por unidade (gramas, mililitros ou itens).
-
-## Funcionalidades
-
-* Manipulação dinâmica de diversas unidades de medida (gramas, quilogramas, mililitros, litros, unidades, caixas, packs, etc.).
-* Cálculo e exibição da opção de compra mais econômica.
-* Permite comparações detalhadas de pacotes contendo múltiplas subunidades (ex: fardos com várias unidades menores).
-* Integração fácil para relatórios de comparação de preços.
+- Armazenamento local de listas de compras com AsyncStorage.
+- Interface para adicionar, visualizar e remover itens.
+- Suporte para adicionar quantidades para cada item.
 
 ## Como iniciar
 
@@ -45,10 +34,10 @@ npx expo start
 
 Isso abre opções para:
 
-* [Build de desenvolvimento](https://docs.expo.dev/develop/development-builds/introduction/)
-* [Emulador Android](https://docs.expo.dev/workflow/android-studio-emulator/)
-* [Simulador iOS](https://docs.expo.dev/workflow/ios-simulator/)
-* [Expo Go](https://expo.dev/go)
+- [Build de desenvolvimento](https://docs.expo.dev/develop/development-builds/introduction/)
+- [Emulador Android](https://docs.expo.dev/workflow/android-studio-emulator/)
+- [Simulador iOS](https://docs.expo.dev/workflow/ios-simulator/)
+- [Expo Go](https://expo.dev/go)
 
 Comece editando os arquivos no diretório **app**. Este projeto utiliza [roteamento baseado em arquivos](https://docs.expo.dev/router/introduction).
 
@@ -63,15 +52,31 @@ Comece editando os arquivos no diretório **app**. Este projeto utiliza [roteame
 ├── features/           # Funcionalidades principais
 │   └── comparador-precos/ # Comparador de preços
 │       ├── components/ # Componentes do comparador
-│       ├── hooks/      # Hooks personalizados 
+│       ├── hooks/      # Hooks personalizados
 │       └── utils/      # Funções utilitárias
 └── hooks/              # Hooks globais da aplicação
 ```
 
-* [Documentação Expo](https://docs.expo.dev/)
-* [Tutorial Learn Expo](https://docs.expo.dev/tutorial/introduction/)
+## Tecnologias Principais
 
-## Junte-se à comunidade
+- [Expo Router](https://docs.expo.dev/router/introduction/) - Navegação baseada em arquivos
+- [React Native](https://reactnative.dev/) - Framework para desenvolvimento mobile
+- [AsyncStorage](https://react-native-async-storage.github.io/async-storage/) - Armazenamento local para listas
+- [TypeScript](https://www.typescriptlang.org/) - Tipagem estática para melhor manutenção do código
 
-* [Expo GitHub](https://github.com/expo/expo)
-* [Comunidade no Discord](https://chat.expo.dev)
+## Documentação Adicional
+
+- [Arquitetura do Projeto](./docs/architecture.md)
+- [Documentação de Funcionalidades](./docs/features.md)
+- [Guia de Contribuição](./docs/contributing.md)
+- [Manual do Usuário](./docs/user-guide.md)
+- [Tarefas Planejadas](./docs/tasks.md)
+- [Documentação detalhada do Comparador de Preços](./features/comparador-precos/README.md)
+- [Changelog](./CHANGELOG.md)
+
+## Links úteis
+
+- [Documentação Expo](https://docs.expo.dev/)
+- [Tutorial Learn Expo](https://docs.expo.dev/tutorial/introduction/)
+- [Expo GitHub](https://github.com/expo/expo)
+- [Comunidade no Discord](https://chat.expo.dev)

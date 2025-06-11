@@ -30,6 +30,14 @@
 - ✅ Implementação da exibição de resultados com economia percentual
 - ✅ Suporte para adição/remoção de produtos da comparação
 
+### Funcionalidade de Lista de Compras
+
+- ✅ Implementação inicial da tela de Lista de Compras
+- ✅ Implementação da persistência com AsyncStorage
+- ✅ Desenvolvimento da interface para adicionar novos itens
+- ✅ Funcionalidade para remover itens da lista
+- ✅ Estilização da interface de lista de compras
+
 ### Telas e Navegação
 
 - ✅ Implementação da tab navigation entre as telas principais
@@ -38,17 +46,13 @@
 
 ## Tarefas em Andamento e Futuras
 
-### Fase 1 - Implementação da Lista de Mercado (Prioridade Atual)
+### Fase 1 - Melhorias na Lista de Mercado (Prioridade Atual)
 
-- ⏳ Instalação das dependências para SQLite e ORM do Expo
-  ```
-  npx expo install expo-sqlite
-  ```
-- ⏳ Criação do modelo de dados para itens da lista de compras
-- ⏳ Implementação do serviço de banco de dados para persistência
-- ⏳ Desenvolvimento da interface para adicionar novos itens
-- ⏳ Implementação da listagem de itens com categorização
-- ⏳ Funcionalidade para marcar/desmarcar itens como comprados
+- 📋 Implementação da funcionalidade de categorias
+- 📋 Adição de priorização de itens
+- 📋 Desenvolvimento do histórico de listas
+- 📋 Funcionalidade para marcar/desmarcar itens como comprados
+- 📋 Implementação da estimativa de preços
 
 ### Fase 1.5 - Melhorias no Comparador de Preços
 
@@ -64,11 +68,14 @@
 
 ### Fase 2 - Aprimoramento da Lista de Mercado
 
-- 📋 Implementação da funcionalidade de categorias
-- 📋 Adição de priorização de itens
-- 📋 Desenvolvimento do histórico de listas
-- 📋 Funcionalidade de estimativa de preços
-- 📋 Implementação de sugestões baseadas no histórico
+- 📋 Adição de sugestões baseadas no histórico de compras
+- 📋 Implementação de compartilhamento de listas
+- 📋 Atualização para uso do SQLite (opção mais robusta que AsyncStorage)
+  ```
+  npx expo install expo-sqlite
+  ```
+- 📋 Desenvolvimento de funcionalidades para armazenar preços
+- 📋 Estatísticas de gastos e histórico de compras
 
 ### Fase 3 - Integração e Recursos Avançados
 
@@ -76,7 +83,6 @@
   - Adicionar opção para incluir produtos comparados diretamente na lista de compras
   - Salvar histórico de comparações para referência futura
   - Exibir produtos da lista de compras como opções no comparador
-- 📋 Implementação do compartilhamento de listas
 - 📋 Desenvolvimento de funcionalidades para marcação de produtos em promoção
 - 📋 Adição de estatísticas de economia e sugestões de economia
 - 📋 Otimização de performance e experiência do usuário
@@ -91,7 +97,8 @@
 
 ## Notas Técnicas
 
-- O armazenamento local será implementado com SQLite através da biblioteca expo-sqlite
-- Será utilizado um padrão de repositório para abstração do acesso ao banco de dados
-- A arquitetura seguirá o padrão de componentes funcionais com hooks do React
-- TypeScript será utilizado para garantir tipagem segura e melhor manutenibilidade
+- O armazenamento local está implementado com AsyncStorage para persistência básica
+- Pode ser migrado para SQLite no futuro para recursos mais avançados
+- A arquitetura segue o padrão de componentes funcionais com hooks do React
+- TypeScript é utilizado para garantir tipagem segura e melhor manutenibilidade
+- O projeto usa Expo na versão 53 para aproveitar os recursos mais recentes

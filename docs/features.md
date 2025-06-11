@@ -21,12 +21,17 @@ Permite ao usuário comparar preços de produtos baseados em diferentes unidades
 
 ## Lista de Mercado
 
-A funcionalidade de Lista de Mercado oferece uma solução eficiente para organização de compras, com as seguintes capacidades:
+A funcionalidade de Lista de Mercado oferece uma solução para organização de compras, com as seguintes capacidades:
 
-### Características principais:
+### Implementadas:
 
-- **Armazenamento local com SQLite e ORM do Expo**: Permite salvar e gerenciar listas de compras mesmo sem conexão com a internet.
-- **Categorização de itens**: Organiza produtos por categorias (frutas, laticínios, limpeza, etc.) para facilitar a navegação.
+- **Armazenamento local com AsyncStorage**: Permite salvar e gerenciar listas de compras mesmo sem conexão com a internet.
+- **Interface para adicionar itens**: UI simples para adicionar produtos com quantidades.
+- **Visualização e remoção de itens**: Capacidade de visualizar todos os itens adicionados e remover conforme necessário.
+
+### Planejadas para implementação futura:
+
+- **Categorização de itens**: Organização de produtos por categorias (frutas, laticínios, limpeza, etc.).
 - **Priorização de itens**: Possibilidade de marcar itens como prioritários.
 - **Status de compra**: Acompanhamento do que já foi colocado no carrinho.
 - **Histórico de compras**: Acesso a listas anteriores para reutilização.
