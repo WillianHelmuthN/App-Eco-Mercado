@@ -1,6 +1,6 @@
-# Comparador de Preços - Eco-Mercado
+# Comparador de Preços - B-Market
 
-O Comparador de Preços é uma funcionalidade central do Eco-Mercado que permite aos usuários comparar produtos com diferentes unidades de medida e embalagens, identificando qual oferece o melhor custo-benefício.
+O Comparador de Preços é uma funcionalidade central do B-Market que permite aos usuários comparar produtos com diferentes unidades de medida e embalagens, identificando qual oferece o melhor custo-benefício.
 
 ## Status: ✅ Implementado
 

@@ -1,12 +1,12 @@
-# 📱 Eco-Mercado
+# 📱 B-Market
 
-Este é um aplicativo desenvolvido em React Native utilizando [Expo](https://expo.dev). Seu principal objetivo é auxiliar usuários a economizar nas compras através de funcionalidades de comparação de preços e gerenciamento de listas de compras.
+Este é um aplicativo desenvolvido em React Native utilizando [Expo](https://expo.dev). Seu principal objetivo é auxiliar usuários a economizar nas compras através de funcionalidades de comparação de preços, gerenciamento de listas de compras e, futuramente, controle de estoque doméstico.
 
 ## Funcionalidades Principais
 
 ### Comparador de Preços
 
-- Manipulação dinâmica de diversas unidades de medida (gramas, quilogramas, mililitros, litros, unidades, caixas, packs, etc.).
+- Manipulação dinâmica de diversas unidades de medida (gramas, quilogramas, mililitros, litros, unidades, caixas, packs, fardos, etc.).
 - Cálculo e exibição da opção de compra mais econômica.
 - Permite comparações detalhadas de pacotes contendo múltiplas subunidades (ex: fardos com várias unidades menores).
 - Cálculo de economia percentual entre diferentes opções.
@@ -17,6 +17,13 @@ Este é um aplicativo desenvolvido em React Native utilizando [Expo](https://exp
 - Armazenamento local de listas de compras com AsyncStorage.
 - Interface para adicionar, visualizar e remover itens.
 - Suporte para adicionar quantidades para cada item.
+- Funcionalidades em implementação: categorias, priorização de itens, histórico de listas.
+
+### Funcionalidades Planejadas
+
+- **Gerenciamento de Estoque e Controle de Validade**: Sistema para acompanhar produtos disponíveis em casa com controle de validade e notificações.
+- **Assistente de Receitas com IA**: Extração de ingredientes de receitas e integração com estoque e lista de compras.
+- **Mapeamento de Supermercados**: Navegação interna otimizada em supermercados e sistema de ofertas personalizadas.
 
 ## Como iniciar
 
@@ -63,13 +70,20 @@ Comece editando os arquivos no diretório **app**. Este projeto utiliza [roteame
 - [React Native](https://reactnative.dev/) - Framework para desenvolvimento mobile
 - [AsyncStorage](https://react-native-async-storage.github.io/async-storage/) - Armazenamento local para listas
 - [TypeScript](https://www.typescriptlang.org/) - Tipagem estática para melhor manutenção do código
+- [Expo EAS Build](https://docs.expo.dev/build/introduction/) - Geração de builds para Android e iOS
+
+## Builds e Implantação
+
+Para gerar um APK para Android (build de preview):
+
+```bash
+npx eas build --platform android --profile preview
+```
 
 ## Documentação Adicional
 
 - [Arquitetura do Projeto](./docs/architecture.md)
 - [Documentação de Funcionalidades](./docs/features.md)
-- [Guia de Contribuição](./docs/contributing.md)
-- [Manual do Usuário](./docs/user-guide.md)
 - [Tarefas Planejadas](./docs/tasks.md)
 - [Documentação detalhada do Comparador de Preços](./features/comparador-precos/README.md)
 - [Changelog](./CHANGELOG.md)

@@ -1,4 +1,4 @@
-# Changelog - Eco-Mercado
+# Changelog - B-Market
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
@@ -9,8 +9,16 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
-- Documentação completa do projeto (arquitetura, contribuição, manual do usuário)
-- Melhorias na documentação das funcionalidades existentes
+- Documentação atualizada e expandida para incluir as novas funcionalidades planejadas
+- Detalhamento das melhorias futuras para o comparador de preços
+- Documentação da futura funcionalidade de Gerenciamento de Estoque
+- Documentação para os recursos avançados planejados (Assistente de Receitas, Mapeamento de Supermercados)
+
+### Alterado
+
+- Rebrand do aplicativo de "Eco-Mercado" para "B-Market"
+- Atualização do ícone do aplicativo
+- Melhoria do processo de build com Expo EAS
 
 ## [1.0.0] - 2025-06-11
 

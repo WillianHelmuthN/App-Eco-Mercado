@@ -78,7 +78,7 @@
 
 ### Fase 2.5 - Gerenciamento de Estoque e Controle de Validade
 
-- 📋 Criação da tela de Estoque Doméstico
+- 📋 Criação da tela de Estoque Doméstico (Minha Despensa)
   - Design da interface de listagem de produtos em estoque
   - Implementação de filtros por categoria, validade e quantidade
   - Desenvolvimento de visualização detalhada de produtos
