@@ -19,7 +19,7 @@ export default function MainScreen() {
   );
 
   const iniciarCompras = () => {
-    router.push("/(tabs)");
+    router.push("/(tabs)/Comparar");
   };
 
   const abrirListaCompras = () => {

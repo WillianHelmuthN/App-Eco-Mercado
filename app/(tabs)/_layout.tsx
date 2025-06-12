@@ -28,7 +28,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="Comparar"
         options={{
           title: "Comparar",
           tabBarIcon: ({ color }) => (
