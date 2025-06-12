@@ -31,13 +31,12 @@ A funcionalidade de Lista de Mercado oferece uma solução para organização de
 
 ### Planejadas para implementação futura:
 
-- **Categorização de itens**: Organização de produtos por categorias (frutas, laticínios, limpeza, etc.).
+- **Categorização de itens**: Organização de produtos por categorias (frutas, laticínios, limpeza, farmácia, etc.).
 - **Priorização de itens**: Possibilidade de marcar itens como prioritários.
 - **Status de compra**: Acompanhamento do que já foi colocado no carrinho.
 - **Histórico de compras**: Acesso a listas anteriores para reutilização.
 - **Estimativa de preços**: Capacidade de adicionar preços estimados para planejamento de orçamento.
 - **Sugestões inteligentes**: Baseado no histórico de compras, o app sugere itens frequentemente adquiridos.
-- **Compartilhamento de listas**: Possibilidade de compartilhar listas com outras pessoas.
 
 ### Benefícios econômicos:
 

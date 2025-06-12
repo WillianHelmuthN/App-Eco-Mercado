@@ -29,7 +29,7 @@ export default function MainScreen() {
   return (
     <ThemedView style={styles.container}>
       <Image
-        source={require("@/assets/images/react-logo.png")}
+        source={require("@/assets/images/TelaInicial.png")}
         style={styles.logo}
         contentFit="contain"
       />
