@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "eco-mercado",
-    "slug": "eco-mercado",
+    "name": "B-Market",
+    "slug": "b-market",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "ecomercado",
+    "icon": "./assets/images/AppIco.png",
+    "scheme": "bmarket",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/AppIco.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
