@@ -53,6 +53,19 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="Despensa"
+        options={{
+          title: "Despensa",
+          tabBarIcon: ({ color }) => (
+            <AntDesign
+              name="home"
+              size={26}
+              color={colorScheme === "dark" ? "white" : "black"}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

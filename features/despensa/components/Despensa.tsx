@@ -150,37 +150,36 @@ export function Despensa() {
           placeholderTextColor={placeholderColor}
         />
 
-        <View style={styles.rowContainer}>
-          <TextInput
-            style={[
-              styles.inputQuantidade,
-              {
-                borderColor,
-                color: textColor,
-                backgroundColor: inputBackgroundColor,
-              },
-            ]}
-            placeholder="Quantidade"
-            value={quantidade}
-            onChangeText={setQuantidade}
-            keyboardType="numeric"
-            placeholderTextColor={placeholderColor}
-          />
+        <TextInput
+          style={[
+            styles.input,
+            {
+              borderColor,
+              color: textColor,
+              backgroundColor: inputBackgroundColor,
+            },
+          ]}
+          placeholder="Quantidade"
+          value={quantidade}
+          onChangeText={setQuantidade}
+          keyboardType="numeric"
+          placeholderTextColor={placeholderColor}
+        />
 
-          <TouchableOpacity
-            style={[
-              styles.unidadeSelector,
-              {
-                borderColor,
-                backgroundColor: inputBackgroundColor,
-              },
-            ]}
-            onPress={() => setModalUnidadeVisivel(true)}
-          >
-            <ThemedText>{unidade}</ThemedText>
-            <Ionicons name="chevron-down" size={16} color={textColor} />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          style={[
+            styles.unidadeSelector,
+            {
+              borderColor,
+              backgroundColor: inputBackgroundColor,
+              marginBottom: 12,
+            },
+          ]}
+          onPress={() => setModalUnidadeVisivel(true)}
+        >
+          <ThemedText>{unidade}</ThemedText>
+          <Ionicons name="chevron-down" size={16} color={textColor} />
+        </TouchableOpacity>
 
         <TextInput
           style={[
@@ -333,7 +332,7 @@ export function Despensa() {
 
 const styles = StyleSheet.create({
   formContainer: {
-    padding: 16,
+    padding: 1,
     marginBottom: 16,
     borderRadius: 12,
     shadowColor: "#000",
@@ -352,7 +351,7 @@ const styles = StyleSheet.create({
   },
   rowContainer: {
     flexDirection: "row",
-    marginBottom: 12,
+    marginBottom: 0,
   },
   input: {
     height: 48,
@@ -362,24 +361,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 12,
   },
-  inputQuantidade: {
-    flex: 1,
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    fontSize: 16,
-  },
   unidadeSelector: {
     height: 48,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 12,
-    marginLeft: 12,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    minWidth: 120,
   },
   addButton: {
     backgroundColor: "#4a9f6e",
