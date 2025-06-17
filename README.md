@@ -102,4 +102,4 @@ npx eas build --platform android --profile preview-local --local
 
 ---
 
-Desenvolvido por [@willian](https://github.com/willian) | [Expo](https://docs.expo.dev/)
+Desenvolvido por [@willian](https://github.com/WillianHelmuthN) | [Expo](https://docs.expo.dev/)
