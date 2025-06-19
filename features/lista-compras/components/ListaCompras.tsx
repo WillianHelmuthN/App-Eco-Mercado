@@ -1,15 +1,19 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   FlatList,
   Platform,
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { useListaCompras } from "../hooks/useListaCompras";
+import { CategoriaSeletor } from "./Categorias/CategoriaSeletor";
+import { CategoriaFiltro } from "./Categorias/CategoriaFiltro";
+import { CATEGORIAS, getCategoriaById } from "../utils/categorias";
 
 /**
  * Componente visual da lista de compras, desacoplado da lógica de estado/persistência
@@ -18,6 +22,8 @@ export function ListaCompras() {
   const { itens, adicionarItem, removerItem, forceUpdate } = useListaCompras();
   const [nomeProduto, setNomeProduto] = useState("");
   const [quantidade, setQuantidade] = useState("");
+  const [categoriaId, setCategoriaId] = useState("mercado"); // Categoria padrão
+  const [filtroCategoria, setFiltroCategoria] = useState<string | null>(null); // null = todas as categorias
 
   // Cores baseadas no tema
   const textColor = useThemeColor({ light: "#000", dark: "#fff" }, "text");
@@ -34,11 +40,20 @@ export function ListaCompras() {
     "tabIconDefault"
   );
 
+  // Filtrar itens por categoria
+  const itensFiltrados = useMemo(() => {
+    if (filtroCategoria === null) {
+      return itens; // Retorna todos os itens se não houver filtro
+    }
+    return itens.filter((item) => item.categoriaId === filtroCategoria);
+  }, [itens, filtroCategoria]);
+
   const handleAdicionar = async () => {
-    const ok = await adicionarItem(nomeProduto, quantidade);
+    const ok = await adicionarItem(nomeProduto, quantidade, categoriaId);
     if (ok) {
       setNomeProduto("");
       setQuantidade("");
+      // Mantém a categoria selecionada para facilitar a adição de itens similares
     }
   };
 
@@ -70,6 +85,13 @@ export function ListaCompras() {
           onChangeText={setNomeProduto}
           placeholderTextColor={placeholderColor}
         />
+
+        {/* Seletor de categoria */}
+        <CategoriaSeletor
+          categoriaId={categoriaId}
+          onCategoriaChange={setCategoriaId}
+        />
+
         <TextInput
           style={[
             styles.inputQuantidade,
@@ -90,10 +112,16 @@ export function ListaCompras() {
         </TouchableOpacity>
       </ThemedView>
 
+      {/* Filtro de categorias */}
+      <CategoriaFiltro
+        categoriaSelecionada={filtroCategoria}
+        onCategoriaChange={setFiltroCategoria}
+      />
+
       {/* Lista de itens */}
-      {itens.length > 0 ? (
+      {itensFiltrados.length > 0 ? (
         <FlatList
-          data={itens}
+          data={itensFiltrados}
           extraData={forceUpdate}
           renderItem={({ item }) => (
             <ThemedView style={styles.itemContainer}>
@@ -102,6 +130,22 @@ export function ListaCompras() {
                   {item.nome}
                 </ThemedText>
                 <ThemedText>Qtd: {item.quantidade}</ThemedText>
+                {item.categoriaId && (
+                  <View style={styles.categoriaContainer}>
+                    <View
+                      style={[
+                        styles.categoriaDot,
+                        {
+                          backgroundColor: getCategoriaById(item.categoriaId)
+                            .cor,
+                        },
+                      ]}
+                    />
+                    <ThemedText style={styles.categoriaText}>
+                      {getCategoriaById(item.categoriaId).nome}
+                    </ThemedText>
+                  </View>
+                )}
               </ThemedView>
               <TouchableOpacity
                 onPress={() => handleRemover(item.id)}
@@ -119,7 +163,14 @@ export function ListaCompras() {
         />
       ) : (
         <ThemedView style={styles.listaVazia}>
-          <ThemedText>Sua lista de compras está vazia</ThemedText>
+          {filtroCategoria === null ? (
+            <ThemedText>Sua lista de compras está vazia</ThemedText>
+          ) : (
+            <ThemedText>
+              Nenhum item encontrado na categoria{" "}
+              {getCategoriaById(filtroCategoria).nome}
+            </ThemedText>
+          )}
         </ThemedView>
       )}
     </>
@@ -183,6 +234,21 @@ const styles = StyleSheet.create({
   },
   itemNome: {
     marginBottom: 4,
+  },
+  categoriaContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 4,
+  },
+  categoriaDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginRight: 6,
+  },
+  categoriaText: {
+    fontSize: 12,
+    opacity: 0.8,
   },
   removerBtn: {
     width: 40,
