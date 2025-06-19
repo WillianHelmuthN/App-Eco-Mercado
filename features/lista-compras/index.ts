@@ -7,3 +7,11 @@ export { ListaCompras } from "./components/ListaCompras";
 
 // Hooks
 export { useListaCompras } from "./hooks/useListaCompras";
+
+// Utilitários
+export {
+  CATEGORIAS,
+  Categoria,
+  getCategoriaById,
+  getCorPadrao,
+} from "./utils/categorias";

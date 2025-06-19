@@ -7,6 +7,7 @@ export interface ItemCompra {
   nome: string;
   quantidade: string;
   dataAdicionado: string;
+  categoriaId?: string;
 }
 
 const STORAGE_KEY = "@eco_mercado_lista_compras";
@@ -43,7 +44,11 @@ export function useListaCompras() {
   };
 
   // Adicionar item
-  const adicionarItem = async (nome: string, quantidade: string) => {
+  const adicionarItem = async (
+    nome: string,
+    quantidade: string,
+    categoriaId?: string
+  ) => {
     if (nome.trim() === "") {
       if (Platform.OS === "web") {
         alert("O nome do produto é obrigatório");
@@ -58,6 +63,7 @@ export function useListaCompras() {
         nome,
         quantidade: quantidade || "1",
         dataAdicionado: new Date().toISOString(),
+        categoriaId: categoriaId || "outros",
       };
       const novosItens = [...itens, novoItem];
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novosItens));
