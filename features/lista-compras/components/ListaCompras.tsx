@@ -113,10 +113,12 @@ export function ListaCompras() {
       </ThemedView>
 
       {/* Filtro de categorias */}
-      <CategoriaFiltro
-        categoriaSelecionada={filtroCategoria}
-        onCategoriaChange={setFiltroCategoria}
-      />
+      <View style={styles.filtroContainer}>
+        <CategoriaFiltro
+          categoriaSelecionada={filtroCategoria}
+          onCategoriaChange={setFiltroCategoria}
+        />
+      </View>
 
       {/* Lista de itens */}
       {itensFiltrados.length > 0 ? (
@@ -187,6 +189,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
+  },
+  filtroContainer: {
+    marginHorizontal: 10,
+    marginBottom: 10,
   },
   input: {
     height: 48,
