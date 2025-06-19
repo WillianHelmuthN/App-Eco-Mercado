@@ -1,9 +1,10 @@
 import React from "react";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { CATEGORIAS } from "../../utils/categorias";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { Ionicons } from "@expo/vector-icons";
 
 interface CategoriaFiltroProps {
   /**
@@ -17,21 +18,40 @@ interface CategoriaFiltroProps {
 }
 
 /**
- * Componente de filtro por categoria usando tabs horizontais
+ * Componente de filtro por categoria usando cards coloridos
  */
 export function CategoriaFiltro({
   categoriaSelecionada,
   onCategoriaChange,
 }: CategoriaFiltroProps) {
   // Cores baseadas no tema
-  const tintColor = useThemeColor(
-    { light: "#007AFF", dark: "#0A84FF" },
-    "tint"
-  );
-  const tabBackgroundColor = useThemeColor(
-    { light: "#f0f0f0", dark: "#333" },
+  const cardBackgroundColor = useThemeColor(
+    { light: "#fff", dark: "#1e1e1e" },
     "background"
   );
+  const shadowColor = useThemeColor({ light: "#000", dark: "#000" }, "text");
+
+  // Ícones para cada categoria
+  const getCategoryIcon = (id: string | null): string => {
+    if (id === null) return "apps-outline";
+
+    switch (id) {
+      case "mercado":
+        return "basket-outline";
+      case "farmacia":
+        return "medical-outline";
+      case "padaria":
+        return "fast-food-outline";
+      case "acougue":
+        return "restaurant-outline";
+      case "petshop":
+        return "paw-outline";
+      case "limpeza":
+        return "sparkles-outline";
+      default:
+        return "ellipsis-horizontal-outline";
+    }
+  };
 
   return (
     <ThemedView style={styles.container}>
@@ -40,63 +60,70 @@ export function CategoriaFiltro({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Tab para "Todas as Categorias" */}
+        {/* Card para "Todas as Categorias" */}
         <TouchableOpacity
           style={[
-            styles.tab,
-            { backgroundColor: tabBackgroundColor },
-            categoriaSelecionada === null && {
-              borderBottomColor: tintColor,
-              borderBottomWidth: 2,
+            styles.categoryCard,
+            {
+              backgroundColor:
+                categoriaSelecionada === null ? "#607d8b" : cardBackgroundColor,
+              borderColor: "#607d8b",
+              shadowColor: shadowColor,
             },
           ]}
           onPress={() => onCategoriaChange(null)}
           activeOpacity={0.7}
         >
+          <Ionicons
+            name={getCategoryIcon(null) as any}
+            size={22}
+            color={categoriaSelecionada === null ? "#fff" : "#607d8b"}
+            style={styles.categoryIcon}
+          />
           <ThemedText
             style={[
-              styles.tabText,
-              categoriaSelecionada === null && {
-                color: tintColor,
-                fontWeight: "bold",
-              },
+              styles.categoryText,
+              categoriaSelecionada === null && { color: "#fff" },
             ]}
           >
             Todas
           </ThemedText>
         </TouchableOpacity>
 
-        {/* Tabs para cada categoria */}
+        {/* Cards para cada categoria */}
         {CATEGORIAS.map((categoria) => (
           <TouchableOpacity
             key={categoria.id}
             style={[
-              styles.tab,
-              { backgroundColor: tabBackgroundColor },
-              categoriaSelecionada === categoria.id && {
-                borderBottomColor: categoria.cor,
-                borderBottomWidth: 2,
+              styles.categoryCard,
+              {
+                backgroundColor:
+                  categoriaSelecionada === categoria.id
+                    ? categoria.cor
+                    : cardBackgroundColor,
+                borderColor: categoria.cor,
+                shadowColor: shadowColor,
               },
             ]}
             onPress={() => onCategoriaChange(categoria.id)}
             activeOpacity={0.7}
           >
-            <View style={styles.tabContent}>
-              <View
-                style={[styles.categoryDot, { backgroundColor: categoria.cor }]}
-              />
-              <ThemedText
-                style={[
-                  styles.tabText,
-                  categoriaSelecionada === categoria.id && {
-                    color: categoria.cor,
-                    fontWeight: "bold",
-                  },
-                ]}
-              >
-                {categoria.nome}
-              </ThemedText>
-            </View>
+            <Ionicons
+              name={getCategoryIcon(categoria.id) as any}
+              size={22}
+              color={
+                categoriaSelecionada === categoria.id ? "#fff" : categoria.cor
+              }
+              style={styles.categoryIcon}
+            />
+            <ThemedText
+              style={[
+                styles.categoryText,
+                categoriaSelecionada === categoria.id && { color: "#fff" },
+              ]}
+            >
+              {categoria.nome}
+            </ThemedText>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -106,28 +133,30 @@ export function CategoriaFiltro({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 8,
+    marginVertical: 10,
   },
   scrollContent: {
-    paddingHorizontal: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
   },
-  tab: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginHorizontal: 4,
-  },
-  tabContent: {
+  categoryCard: {
     flexDirection: "row",
     alignItems: "center",
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 18,
+    marginHorizontal: 4,
+    borderWidth: 1.5,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
-  tabText: {
-    fontSize: 14,
-  },
-  categoryDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+  categoryIcon: {
     marginRight: 6,
+  },
+  categoryText: {
+    fontSize: 14,
+    fontWeight: "500",
   },
 });

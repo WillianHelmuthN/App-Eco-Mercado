@@ -13,7 +13,7 @@ import {
 import { useListaCompras } from "../hooks/useListaCompras";
 import { CategoriaSeletor } from "./Categorias/CategoriaSeletor";
 import { CategoriaFiltro } from "./Categorias/CategoriaFiltro";
-import { CATEGORIAS, getCategoriaById } from "../utils/categorias";
+import { getCategoriaById } from "../utils/categorias";
 
 /**
  * Componente visual da lista de compras, desacoplado da lógica de estado/persistência
@@ -179,7 +179,7 @@ export function ListaCompras() {
 
 const styles = StyleSheet.create({
   formContainer: {
-    padding: 16,
+    padding: 2,
     marginBottom: 20,
     borderRadius: 12,
     shadowColor: "#000",
