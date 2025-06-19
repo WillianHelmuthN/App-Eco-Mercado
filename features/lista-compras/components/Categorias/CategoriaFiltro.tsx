@@ -35,6 +35,10 @@ export function CategoriaFiltro({
   // Estado para controlar a expansão
   const [expanded, setExpanded] = useState(false);
 
+  // Animação para transição suave entre categorias
+  const cardScaleAnim = useRef(new Animated.Value(1)).current;
+  const cardOpacityAnim = useRef(new Animated.Value(1)).current;
+
   // Configurar LayoutAnimation para Android
   useEffect(() => {
     if (Platform.OS === "android") {
@@ -151,6 +155,45 @@ export function CategoriaFiltro({
     }
   };
 
+  // Função para animar a transição entre categorias
+  const animarMudancaCategoria = (novaCategoriaId: string | null) => {
+    // Primeiro diminuir o card atual
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(cardScaleAnim, {
+          toValue: 0.9,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+        Animated.timing(cardOpacityAnim, {
+          toValue: 0.5,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.parallel([
+        Animated.timing(cardScaleAnim, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(cardOpacityAnim, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
+
+    // Atualizar a categoria selecionada
+    onCategoriaChange(novaCategoriaId);
+
+    // Fechar o menu de expansão se estiver aberto
+    if (expanded) {
+      toggleExpand();
+    }
+  };
+
   // Efeito para atualizar animações quando o estado de expansão muda
   useEffect(() => {
     if (!expanded) {
@@ -165,51 +208,62 @@ export function CategoriaFiltro({
   return (
     <ThemedView style={styles.container}>
       <View style={styles.centerContainer}>
-        {/* Card para "Todas as Categorias" - sempre visível e centralizado */}
-        <TouchableOpacity
-          style={[
-            styles.categoryCard,
-            {
-              backgroundColor:
-                categoriaSelecionada === null ? "#607d8b" : cardBackgroundColor,
-              borderColor: "#607d8b",
-              shadowColor: shadowColor,
-              zIndex: 1,
-            },
-          ]}
-          onPress={() => {
-            onCategoriaChange(null);
-            toggleExpand();
+        {/* Card para categoria selecionada - sempre visível e centralizado */}
+        <Animated.View
+          style={{
+            transform: [{ scale: cardScaleAnim }],
+            opacity: cardOpacityAnim,
           }}
-          activeOpacity={0.7}
         >
-          <Ionicons
-            name={getCategoryIcon(null) as any}
-            size={22}
-            color={categoriaSelecionada === null ? "#fff" : "#607d8b"}
-            style={styles.categoryIcon}
-          />
-          <ThemedText
+          <TouchableOpacity
             style={[
-              styles.categoryText,
-              categoriaSelecionada === null && { color: "#fff" },
+              styles.categoryCard,
+              {
+                backgroundColor:
+                  categoriaSelecionada === null
+                    ? "#607d8b"
+                    : CATEGORIAS.find((c) => c.id === categoriaSelecionada)
+                        ?.cor || "#607d8b",
+                borderColor:
+                  categoriaSelecionada === null
+                    ? "#607d8b"
+                    : CATEGORIAS.find((c) => c.id === categoriaSelecionada)
+                        ?.cor || "#607d8b",
+                shadowColor: shadowColor,
+                zIndex: 1,
+              },
             ]}
-          >
-            Todas
-          </ThemedText>
-          <Animated.View
-            style={{
-              transform: [{ rotate }],
+            onPress={() => {
+              toggleExpand();
             }}
+            activeOpacity={0.7}
           >
             <Ionicons
-              name="chevron-down-outline"
-              size={16}
-              color={categoriaSelecionada === null ? "#fff" : "#607d8b"}
-              style={styles.expandIcon}
+              name={getCategoryIcon(categoriaSelecionada) as any}
+              size={22}
+              color="#fff"
+              style={styles.categoryIcon}
             />
-          </Animated.View>
-        </TouchableOpacity>
+            <ThemedText style={[styles.categoryText, { color: "#fff" }]}>
+              {categoriaSelecionada === null
+                ? "Todas"
+                : CATEGORIAS.find((c) => c.id === categoriaSelecionada)?.nome ||
+                  "Todas"}
+            </ThemedText>
+            <Animated.View
+              style={{
+                transform: [{ rotate }],
+              }}
+            >
+              <Ionicons
+                name="chevron-down-outline"
+                size={16}
+                color="#fff"
+                style={styles.expandIcon}
+              />
+            </Animated.View>
+          </TouchableOpacity>
+        </Animated.View>
       </View>
 
       {/* Cards para cada categoria - visíveis apenas quando expandido */}
@@ -224,21 +278,21 @@ export function CategoriaFiltro({
           ]}
         >
           <View style={styles.categoriesWrapper}>
-            {CATEGORIAS.map((categoria, index) => (
+            {/* Adicionar a opção "Todas" quando outra categoria estiver selecionada */}
+            {categoriaSelecionada !== null && (
               <Animated.View
-                key={categoria.id}
                 style={{
-                  opacity: categoryAnimations[index],
+                  opacity: categoryAnimations[0],
                   transform: [
                     {
                       scale: Animated.add(
                         0.8,
-                        Animated.multiply(categoryAnimations[index], 0.2)
+                        Animated.multiply(categoryAnimations[0], 0.2)
                       ),
                     },
                     {
                       translateY: Animated.multiply(
-                        Animated.subtract(1, categoryAnimations[index]),
+                        Animated.subtract(1, categoryAnimations[0]),
                         10
                       ),
                     },
@@ -249,43 +303,74 @@ export function CategoriaFiltro({
                   style={[
                     styles.categoryCard,
                     {
-                      backgroundColor:
-                        categoriaSelecionada === categoria.id
-                          ? categoria.cor
-                          : cardBackgroundColor,
-                      borderColor: categoria.cor,
+                      backgroundColor: cardBackgroundColor,
+                      borderColor: "#607d8b",
                       shadowColor: shadowColor,
                     },
                   ]}
-                  onPress={() => {
-                    onCategoriaChange(categoria.id);
-                    toggleExpand();
-                  }}
+                  onPress={() => animarMudancaCategoria(null)}
                   activeOpacity={0.7}
                 >
                   <Ionicons
-                    name={getCategoryIcon(categoria.id) as any}
+                    name={getCategoryIcon(null) as any}
                     size={22}
-                    color={
-                      categoriaSelecionada === categoria.id
-                        ? "#fff"
-                        : categoria.cor
-                    }
+                    color="#607d8b"
                     style={styles.categoryIcon}
                   />
-                  <ThemedText
-                    style={[
-                      styles.categoryText,
-                      categoriaSelecionada === categoria.id && {
-                        color: "#fff",
-                      },
-                    ]}
-                  >
-                    {categoria.nome}
-                  </ThemedText>
+                  <ThemedText style={styles.categoryText}>Todas</ThemedText>
                 </TouchableOpacity>
               </Animated.View>
-            ))}
+            )}
+
+            {/* Mostrar todas as categorias exceto a selecionada */}
+            {CATEGORIAS.map(
+              (categoria, index) =>
+                categoria.id !== categoriaSelecionada && (
+                  <Animated.View
+                    key={categoria.id}
+                    style={{
+                      opacity: categoryAnimations[index],
+                      transform: [
+                        {
+                          scale: Animated.add(
+                            0.8,
+                            Animated.multiply(categoryAnimations[index], 0.2)
+                          ),
+                        },
+                        {
+                          translateY: Animated.multiply(
+                            Animated.subtract(1, categoryAnimations[index]),
+                            10
+                          ),
+                        },
+                      ],
+                    }}
+                  >
+                    <TouchableOpacity
+                      style={[
+                        styles.categoryCard,
+                        {
+                          backgroundColor: cardBackgroundColor,
+                          borderColor: categoria.cor,
+                          shadowColor: shadowColor,
+                        },
+                      ]}
+                      onPress={() => animarMudancaCategoria(categoria.id)}
+                      activeOpacity={0.7}
+                    >
+                      <Ionicons
+                        name={getCategoryIcon(categoria.id) as any}
+                        size={22}
+                        color={categoria.cor}
+                        style={styles.categoryIcon}
+                      />
+                      <ThemedText style={styles.categoryText}>
+                        {categoria.nome}
+                      </ThemedText>
+                    </TouchableOpacity>
+                  </Animated.View>
+                )
+            )}
           </View>
         </Animated.View>
       )}
