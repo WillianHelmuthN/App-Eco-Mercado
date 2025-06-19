@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, View, ScrollView } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { CATEGORIAS } from "../../utils/categorias";
 import { ThemedText } from "@/components/ThemedText";
 import { useThemeColor } from "@/hooks/useThemeColor";
@@ -26,6 +26,7 @@ interface CategoriaSeletorProps {
 export function CategoriaSeletor({
   categoriaId,
   onCategoriaChange,
+  label = "Categoria",
 }: CategoriaSeletorProps) {
   // Cores baseadas no tema
   const cardBackgroundColor = useThemeColor(
@@ -55,11 +56,8 @@ export function CategoriaSeletor({
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
+      {label && <ThemedText style={styles.label}>{label}</ThemedText>}
+      <View style={styles.categoriesContainer}>
         {CATEGORIAS.map((categoria) => (
           <TouchableOpacity
             key={categoria.id}
@@ -92,7 +90,7 @@ export function CategoriaSeletor({
             </ThemedText>
           </TouchableOpacity>
         ))}
-      </ScrollView>
+      </View>
     </View>
   );
 }
@@ -102,20 +100,28 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   label: {
-    marginBottom: 10,
-    fontSize: 16,
+    margin: 10,
+    fontSize: 24,
     fontWeight: "500",
+    textAlign: "center",
   },
-  scrollContent: {
-    paddingBottom: 5,
+  categoriesContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: -4, // Compensa a margem dos botões
+    marginBottom: 5,
   },
   categoryButton: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    marginRight: 8,
+    margin: 4,
+    minWidth: 100,
     borderWidth: 1.5,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
