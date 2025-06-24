@@ -7,14 +7,35 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
+import { useEffect } from "react";
+import * as Notifications from "expo-notifications";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { registerForPushNotificationsAsync } from "@/utils/notificacoes";
+
+// Configuração global das notificações
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
+
+  // Inicializar o sistema de notificações quando o app iniciar
+  useEffect(() => {
+    (async () => {
+      await registerForPushNotificationsAsync();
+    })();
+  }, []);
 
   if (!loaded) {
     // Async font loading only occurs in development.

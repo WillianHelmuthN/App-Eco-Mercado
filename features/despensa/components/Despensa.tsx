@@ -2,7 +2,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FlatList,
   Modal,
@@ -13,6 +13,7 @@ import {
   View,
 } from "react-native";
 import { useDespensa } from "../hooks/useDespensa";
+import { registerForPushNotificationsAsync } from "@/utils/notificacoes";
 
 // Unidades disponíveis para seleção
 const unidadesDisponiveis = [
@@ -29,13 +30,25 @@ const unidadesDisponiveis = [
  * Componente principal da Despensa
  */
 export function Despensa() {
-  const { produtos, adicionarProduto, removerProduto, forceUpdate } =
-    useDespensa();
+  const {
+    produtos,
+    adicionarProduto,
+    removerProduto,
+    forceUpdate,
+    produtosVencendo,
+  } = useDespensa();
   const [nomeProduto, setNomeProduto] = useState("");
   const [quantidade, setQuantidade] = useState("");
   const [unidade, setUnidade] = useState("Unidade");
   const [dataValidade, setDataValidade] = useState("");
   const [modalUnidadeVisivel, setModalUnidadeVisivel] = useState(false);
+
+  // Inicializar o sistema de notificações quando o componente montar
+  useEffect(() => {
+    (async () => {
+      await registerForPushNotificationsAsync();
+    })();
+  }, []);
 
   // Cores baseadas no tema
   const textColor = useThemeColor({ light: "#000", dark: "#fff" }, "text");
@@ -214,9 +227,20 @@ export function Despensa() {
 
       {/* Lista de produtos */}
       <ThemedView style={styles.listContainer}>
-        <ThemedText type="subtitle" style={styles.sectionTitle}>
-          Produtos na Despensa
-        </ThemedText>
+        <View style={styles.headerContainer}>
+          <ThemedText type="subtitle" style={styles.sectionTitle}>
+            Produtos na Despensa
+          </ThemedText>
+
+          {produtosVencendo > 0 && (
+            <View style={styles.alertaBadge}>
+              <ThemedText style={styles.alertaBadgeText}>
+                {produtosVencendo}{" "}
+                {produtosVencendo === 1 ? "produto" : "produtos"} vencendo
+              </ThemedText>
+            </View>
+          )}
+        </View>
 
         {produtos.length > 0 ? (
           <FlatList
@@ -464,5 +488,22 @@ const styles = StyleSheet.create({
   itemLista: {
     paddingVertical: 14,
     paddingHorizontal: 16,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  alertaBadge: {
+    backgroundColor: "#ffcc00",
+    borderRadius: 12,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  alertaBadgeText: {
+    color: "#000",
+    fontWeight: "bold",
+    fontSize: 14,
   },
 });

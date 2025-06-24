@@ -42,7 +42,9 @@
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5",
     "@react-native-picker/picker": "2.11.0",
-    "@react-native-community/datetimepicker": "8.3.0"
+    "@react-native-community/datetimepicker": "8.3.0",
+    "expo-notifications": "~0.31.3",
+    "expo-device": "~7.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
