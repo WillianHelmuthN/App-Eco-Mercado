@@ -59,15 +59,6 @@
 
 ## Tarefas para Médio Prazo
 
-### Migração para Armazenamento Robusto
-
-- 📋 Implementação do SQLite
-  ```
-  npx expo install expo-sqlite
-  ```
-- 📋 Migração de dados do AsyncStorage
-- 📋 Esquema de banco de dados otimizado
-
 ### Sistema de Notificações
 
 - 📋 Alertas para produtos próximos da validade
@@ -157,5 +148,15 @@
 - Arquitetura de componentes funcionais com hooks
 - TypeScript para tipagem segura
 - Expo SDK 53+
-- AsyncStorage → SQLite para persistência robusta
+- AsyncStorage para persistência
 - Considerações de privacidade (LGPD/GDPR)
+
+## Decisões Arquiteturais
+
+### Persistência de Dados
+
+- ✅ **AsyncStorage como solução principal**: Decidido manter AsyncStorage como solução de persistência principal devido à compatibilidade estável com Expo
+- ✅ **Remoção do SQLite**: Removido SQLite do roadmap devido a problemas de compatibilidade com Expo
+- 📋 **Otimização do AsyncStorage**: Implementar estratégias de cache e otimização para AsyncStorage
+
+## Tarefas Pendentes

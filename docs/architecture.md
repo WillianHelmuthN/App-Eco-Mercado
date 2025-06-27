@@ -9,7 +9,7 @@ B-Market é um aplicativo móvel para gerenciamento de compras, comparação de 
 - **React Native/Expo**: Framework cross-platform (v53+)
 - **TypeScript**: Tipagem estática para código mais seguro
 - **Expo Router**: Sistema de navegação baseado em arquivos
-- **AsyncStorage/SQLite**: Persistência de dados
+- **AsyncStorage**: Persistência de dados
 - **React Hooks**: Gerenciamento de estado
 
 ## Estrutura do Projeto
@@ -55,7 +55,7 @@ Cada funcionalidade principal é isolada em seu próprio diretório com:
 ### Estado e Lógica
 
 - Hooks personalizados por feature
-- Persistência com AsyncStorage (SQLite em desenvolvimento)
+- Persistência com AsyncStorage
 - Componentização para facilitar testes
 
 ## Roadmap de Evolução
@@ -68,7 +68,6 @@ Cada funcionalidade principal é isolada em seu próprio diretório com:
 
 ### Próximas Fases
 
-- Migração para SQLite
 - Sistema de notificações
 - Backend para sincronização
 - Recursos premium e monetização

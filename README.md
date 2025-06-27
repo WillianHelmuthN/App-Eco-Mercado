@@ -78,7 +78,7 @@ npx expo start
 
 - **Front-end**: React Native, Expo 53+
 - **Navegação**: Expo Router
-- **Armazenamento**: AsyncStorage (SQLite em desenvolvimento)
+- **Armazenamento**: AsyncStorage
 - **Linguagem**: TypeScript
 - **Desenvolvimento**: EAS Build
 
