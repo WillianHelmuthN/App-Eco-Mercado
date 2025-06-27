@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { UnidadeSelectorAvancado } from "@/features/comparador-precos/components/UnidadeSelectorAvancado";
-import { Button, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { useComparadorPrecos } from "../hooks/useComparadorPrecos";
 import {
   DetalhesEmbalagemInfo,
@@ -105,23 +105,31 @@ export function ComparadorPrecos() {
           )}
 
           {/* Botão de adicionar produto */}
-          <View style={styles.buttonContainer}>
-            <Button
-              title="Adicionar Produto"
-              onPress={adicionarProduto}
-              disabled={!valor}
-            />
-          </View>
+          <TouchableOpacity
+            style={[
+              styles.addButton,
+              {
+                opacity: !valor ? 0.6 : 1,
+              },
+            ]}
+            onPress={adicionarProduto}
+            disabled={!valor}
+          >
+            <ThemedText style={styles.addButtonText}>
+              Adicionar Produto
+            </ThemedText>
+          </TouchableOpacity>
 
           {/* Botão de comparar (aparece apenas quando há mais de 1 produto) */}
           {exibirBotaoComparar && (
-            <View style={styles.buttonContainer}>
-              <Button
-                title="Comparar Produtos"
-                onPress={compararProdutos}
-                color="#28a745"
-              />
-            </View>
+            <TouchableOpacity
+              style={[styles.addButton, styles.compareButton]}
+              onPress={compararProdutos}
+            >
+              <ThemedText style={styles.addButtonText}>
+                Comparar Produtos
+              </ThemedText>
+            </TouchableOpacity>
           )}
 
           {/* Exibe o resultado da comparação quando solicitado */}
@@ -167,9 +175,21 @@ const styles = StyleSheet.create({
     gap: 12,
     marginBottom: 16,
   },
-  buttonContainer: {
+  addButton: {
+    backgroundColor: "#4a9f6e",
+    padding: 14,
+    borderRadius: 8,
+    alignItems: "center",
     marginTop: 16,
     marginBottom: 8,
+  },
+  compareButton: {
+    backgroundColor: "#28a745",
+  },
+  addButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
   },
   produtosContainer: {
     marginTop: 24,
