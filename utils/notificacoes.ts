@@ -1,8 +1,18 @@
-import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
-import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import { Platform } from "react-native";
 import { ProdutoDespensa } from "../features/despensa/hooks/useDespensa";
+
+/**
+ * Utilitários para gerenciamento de notificações push e locais
+ *
+ * IMPORTANTE: As notificações push do Expo não são suportadas na plataforma web.
+ * Todas as funções incluem verificação de plataforma para evitar erros.
+ *
+ * Para notificações web, seria necessário implementar Service Workers
+ * e utilizar a Web Push API diretamente.
+ */
 
 // Chave para armazenar o token de notificação
 const NOTIFICATION_TOKEN_KEY = "@bmarket:notification_token";
@@ -24,6 +34,12 @@ Notifications.setNotificationHandler({
  */
 export async function registerForPushNotificationsAsync() {
   let token;
+
+  // Notificações push não são suportadas na web
+  if (Platform.OS === "web") {
+    console.log("Notificações push não são suportadas na plataforma web");
+    return null;
+  }
 
   if (Device.isDevice) {
     const { status: existingStatus } =
@@ -74,6 +90,12 @@ export async function agendarNotificacao(
   segundos: number,
   identificador: string
 ) {
+  // Notificações não são suportadas na web
+  if (Platform.OS === "web") {
+    console.log("Notificações locais não são suportadas na plataforma web");
+    return;
+  }
+
   try {
     // @ts-ignore - Ignora erros de tipo do Expo Notifications
     await Notifications.scheduleNotificationAsync({
@@ -102,6 +124,14 @@ export async function agendarNotificacao(
  * @param identificador ID da notificação a ser cancelada
  */
 export async function cancelarNotificacao(identificador: string) {
+  // Notificações não são suportadas na web
+  if (Platform.OS === "web") {
+    console.log(
+      "Cancelamento de notificações não é suportado na plataforma web"
+    );
+    return;
+  }
+
   await Notifications.cancelScheduledNotificationAsync(identificador);
 }
 
@@ -118,6 +148,14 @@ export async function agendarNotificacaoPorDias(
   diasFuturos: number,
   identificador: string
 ) {
+  // Notificações não são suportadas na web
+  if (Platform.OS === "web") {
+    console.log(
+      "Agendamento de notificações não é suportado na plataforma web"
+    );
+    return;
+  }
+
   try {
     // Criar data para 10h da manhã do dia desejado
     const dataNotificacao = new Date();
@@ -161,6 +199,14 @@ export async function agendarNotificacaoPorDias(
 export async function verificarProdutosProximosVencimento(
   produtos: ProdutoDespensa[]
 ) {
+  // Notificações não são suportadas na web
+  if (Platform.OS === "web") {
+    console.log(
+      "Verificação de produtos próximos ao vencimento não é suportada na plataforma web"
+    );
+    return 0;
+  }
+
   // Cancelar notificações existentes primeiro
   const notificacoesAgendadas =
     await Notifications.getAllScheduledNotificationsAsync();

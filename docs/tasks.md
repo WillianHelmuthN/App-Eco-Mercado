@@ -61,6 +61,10 @@
 
 ### Sistema de Notificações
 
+- ✅ **Configuração básica**: Sistema de notificações implementado para iOS/Android
+- ✅ **Proteção contra web**: Adicionadas verificações de plataforma para evitar erros na web
+- 📋 **Limitação conhecida**: Notificações push não funcionam na plataforma web (limitação do Expo)
+- 📋 **Alternativa web**: Implementar Service Workers para notificações web nativas (futuro)
 - 📋 Alertas para produtos próximos da validade
 - 📋 Notificações para estoque baixo
   ```
